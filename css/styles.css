@@ -1,0 +1,169 @@
+/* TraceX Design System & Utility Styles — Minimal & Premium */
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+:root {
+  --bg-dark: #08090B;
+  --bg-surface: #101214;
+  --bg-subtle: #15181C;
+  --border-subtle: #24282D;
+  --accent-amber: #D6A84F;
+  --text-primary: #E5E7EB;
+  --text-muted: #9CA3AF;
+  --threat-red: #EF4444;
+  --threat-amber: #F59E0B;
+  --threat-green: #10B981;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: 'Hanken Grotesk', sans-serif;
+  overflow-x: hidden;
+}
+
+.font-mono-data {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Mouse-Following Ambient Warm Amber Glow Aura */
+#ambient-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 500px;
+  height: 500px;
+  margin-top: -250px;
+  margin-left: -250px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(214, 168, 79, 0.12) 0%,
+    rgba(214, 168, 79, 0.04) 40%,
+    rgba(214, 168, 79, 0) 70%
+  );
+  pointer-events: none;
+  z-index: 99999;
+  will-change: transform, opacity;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+#ambient-glow.interactive-hover {
+  opacity: 1.05;
+}
+
+@media (pointer: coarse) {
+  #ambient-glow {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #ambient-glow {
+    display: none !important;
+  }
+}
+
+/* Sticky Header States */
+#main-header {
+  height: 5rem; /* 80px top state */
+  display: flex;
+  align-items: center;
+}
+
+#main-header.header-scrolled {
+  height: 4rem; /* 64px scrolled compact state */
+  background-color: rgba(8, 9, 11, 0.95);
+  border-bottom-color: rgba(36, 40, 45, 0.8);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Nav Link Active State (Color Smooth Transition) */
+.nav-link {
+  position: relative;
+  color: #9CA3AF;
+  transition: color 0.3s ease;
+  padding: 0.25rem 0;
+}
+
+.nav-link:hover {
+  color: #E5E7EB;
+}
+
+.nav-link.active {
+  color: #D6A84F !important;
+  font-weight: 700 !important;
+}
+
+/* Custom Minimal Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #08090B;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1F2328;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #24282D;
+}
+
+/* SVG Node Graph Styles */
+.graph-node {
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.graph-node:hover {
+  opacity: 0.95;
+}
+
+.graph-link {
+  stroke: #24282D;
+  stroke-dasharray: 4 4;
+}
+
+/* Pulse Animation */
+@keyframes subtle-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.animate-subtle-pulse {
+  animation: subtle-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Print Styles for Forensic Report */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  header, nav, aside, .no-print, button, #ambient-glow {
+    display: none !important;
+  }
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .bg-surface, .bg-subtle, .bg-[#101214], .bg-[#15181C] {
+    background-color: #ffffff !important;
+    border: 1px solid #ddd !important;
+    color: #000000 !important;
+  }
+  .text-primary, .text-main, .text-[#E5E7EB] {
+    color: #000000 !important;
+  }
+  .text-muted, .text-[#9CA3AF] {
+    color: #555555 !important;
+  }
+}

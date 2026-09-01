@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TraceX — AI-Powered Email Threat Detection & Forensic Intelligence</title>
+  <meta name="description" content="TraceX helps cyber investigators detect phishing and BEC threats, trace email infrastructure, correlate threat campaigns, and preserve forensic evidence." />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Custom CSS with Cache Busting -->
+  <link rel="stylesheet" href="./css/styles.css?v=114" />
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#08090B',
+            surface: '#101214',
+            'surface-subtle': '#15181C',
+            'border-subtle': '#24282D',
+            accent: '#D6A84F',
+            'accent-hover': '#C2943E',
+            'text-main': '#E5E7EB',
+            'text-muted': '#9CA3AF',
+            'threat-high': '#EF4444',
+            'threat-med': '#F59E0B',
+            'threat-safe': '#10B981'
+          },
+          fontFamily: {
+            sans: ['Hanken Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#08090B] text-[#E5E7EB] min-h-screen flex flex-col font-sans antialiased selection:bg-[#D6A84F] selection:text-[#08090B]">
+
+  <!-- Sticky Header Container -->
+  <header id="main-header" class="sticky top-0 z-40 w-full transition-all duration-300 bg-[#08090B]/90 backdrop-blur-md border-b border-[#24282D]/40">
+    <div id="header-container"></div>
+  </header>
+
+  <!-- Main Website Content Container -->
+  <main id="app-main-content" class="flex-1"></main>
+
+  <!-- Application Script Module with Cache Busting -->
+  <script type="module" src="./js/app.js?v=114"></script>
+</body>
+</html>
