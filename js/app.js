@@ -379,7 +379,7 @@ class TraceXApp {
   }
 
   setupScrollSpy() {
-    const sectionIds = ["platform", "how-it-works", "analyze", "threat-intelligence", "forensics"];
+    const sectionIds = ["platform", "analyze", "how-it-works", "sih-project", "threat-intelligence", "forensics"];
     const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
 
     if (!sections.length) return;
@@ -431,8 +431,8 @@ class TraceXApp {
 
   setActiveNav(activeId) {
     let targetNavId = activeId;
-    if (activeId === "analyze") {
-      targetNavId = "how-it-works";
+    if (activeId === "platform") {
+      targetNavId = "analyze";
     }
 
     let activeLink = null;

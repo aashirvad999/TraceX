@@ -14,19 +14,16 @@ export function renderHeader() {
         </span>
       </a>
 
-      <!-- Desktop Navigation Links (Center with Smooth Sliding Active Line Indicator) -->
+      <!-- Desktop Navigation Links (Cleaned & Focused) -->
       <nav id="desktop-nav" class="hidden md:flex items-center justify-center gap-8 lg:gap-10 text-sm font-medium flex-1 relative py-2">
-        <button data-nav="platform" class="nav-link active">
-          Platform
+        <button data-nav="analyze" class="nav-link">
+          Scanner
         </button>
         <button data-nav="how-it-works" class="nav-link">
           How It Works
         </button>
-        <button data-nav="threat-intelligence" class="nav-link">
-          Threat Intelligence
-        </button>
-        <button data-nav="forensics" class="nav-link">
-          Forensics
+        <button data-nav="sih-project" class="nav-link">
+          About SIH Project
         </button>
 
         <!-- Smooth Sliding Active Underline Indicator Bar -->
@@ -35,8 +32,9 @@ export function renderHeader() {
 
       <!-- Primary Action CTA (Right) -->
       <div class="hidden md:flex items-center shrink-0">
-        <button data-nav="analyze" class="px-5 py-2.5 rounded-lg bg-[#D6A84F] hover:bg-[#C2943E] text-[#08090B] font-semibold text-sm transition-colors shadow-sm">
-          Analyze Email
+        <button data-nav="analyze" class="px-5 py-2.5 rounded-xl bg-[#D6A84F] hover:bg-[#C2943E] text-[#08090B] font-extrabold text-sm transition-colors shadow-sm flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-base">upload_file</span>
+          Upload & Analyze
         </button>
       </div>
 
@@ -48,3 +46,4 @@ export function renderHeader() {
     </div>
   `;
 }
+
