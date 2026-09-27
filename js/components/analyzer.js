@@ -55,26 +55,37 @@ export function renderAnalyzer(sampleEmails = [], fileHistory = [], activeEmailI
           </div>
         ` : ''}
 
-        <!-- Preset Scenario Selectors -->
+        <!-- Preset Scenario Selectors (4 Quick-Test Presets) -->
         <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <label class="text-xs font-mono text-[#9CA3AF] uppercase block">Or Load a Threat Preset Scenario</label>
-            <span class="text-xs text-[#9CA3AF]">Click to load test payload</span>
+            <label class="text-xs font-mono text-[#9CA3AF] uppercase block">Or Load a Quick-Test Threat Preset Scenario</label>
+            <span class="text-xs text-[#9CA3AF]">Click to load & analyze test payload</span>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            ${sampleEmails.map((email, idx) => `
-              <button data-sample-idx="${idx}" class="btn-select-sample text-left p-4 rounded-xl border ${hasAnalyzedFile && activeEmailId === email.id ? 'border-[#D6A84F] bg-[#15181C]' : 'border-[#24282D] bg-[#08090B]'} hover:border-[#D6A84F]/60 transition-colors space-y-1 group">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-mono font-semibold ${email.riskScore > 80 ? 'text-[#EF4444]' : email.riskScore > 30 ? 'text-[#F59E0B]' : 'text-[#10B981]'}">
-                    Risk: ${email.riskScore}/100
-                  </span>
-                  <span class="text-[11px] font-mono text-[#9CA3AF]">${email.classification.split(' ')[0]}</span>
-                </div>
-                <div class="text-sm font-bold text-white group-hover:text-[#D6A84F] transition-colors line-clamp-1">
-                  ${email.title}
-                </div>
-              </button>
-            `).join('')}
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            ${sampleEmails.map((email, idx) => {
+              const isClean = email.riskScore <= 25;
+              const isMed = email.riskScore > 25 && email.riskScore <= 60;
+              const colorClass = isClean ? 'text-[#81c784]' : isMed ? 'text-[#f59e0b]' : 'text-[#ffb4ab]';
+              const borderClass = hasAnalyzedFile && activeEmailId === email.id ? 'border-[#D6A84F] bg-[#15181C]' : 'border-[#24282D] bg-[#08090B]';
+              return `
+                <button data-sample-idx="${idx}" class="btn-select-sample text-left p-4 rounded-xl border ${borderClass} hover:border-[#D6A84F]/60 transition-colors space-y-2 group">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-mono font-bold ${colorClass}">
+                      Risk: ${email.riskScore}/100
+                    </span>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded ${isClean ? 'bg-[#81c784]/10 text-[#81c784]' : isMed ? 'bg-[#f59e0b]/10 text-[#f59e0b]' : 'bg-[#ffb4ab]/10 text-[#ffb4ab]'} font-semibold">
+                      ${isClean ? 'CLEAN' : isMed ? 'SUSPICIOUS' : 'THREAT'}
+                    </span>
+                  </div>
+                  <div class="text-xs font-bold text-white group-hover:text-[#D6A84F] transition-colors line-clamp-2">
+                    ${email.title}
+                  </div>
+                  <div class="text-[10px] font-mono text-[#9CA3AF] truncate">
+                    ${email.badges || (isClean ? 'SPF: PASS | DKIM: PASS' : 'SPF: FAIL | DKIM: FAIL')}
+                  </div>
+                </button>
+              `;
+            }).join('')}
           </div>
         </div>
 

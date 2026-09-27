@@ -23,17 +23,60 @@ export function renderThreatResult({ activeEmail, hasAnalyzedFile = true }) {
     `;
   }
 
-  const { title, riskScore, classification, confidence, sender, replyTo, returnPath, messageId, date, subject, authStatus } = activeEmail;
+  const { title, riskScore, classification, confidence, sender, replyTo, returnPath, messageId, date, subject, authStatus, authProof } = activeEmail;
 
-  const isHighRisk = riskScore > 75;
-  const isMedRisk = riskScore > 30 && riskScore <= 75;
+  // 3-Tier Score & Color Coding Calibration:
+  // 0–25: Green (#81c784) "Safe & Authenticated"
+  // 26–60: Amber (#f59e0b) "Unverified Relay or Policy Warning"
+  // 61–100: Red (#ffb4ab) "Malicious Phishing / BEC Impersonation"
+  const isClean = riskScore <= 25;
+  const isMedRisk = riskScore > 25 && riskScore <= 60;
+  const isHighRisk = riskScore > 60;
   
-  const scoreColorClass = isHighRisk ? 'text-[#EF4444]' : isMedRisk ? 'text-[#F59E0B]' : 'text-[#10B981]';
-  const badgeBgClass = isHighRisk ? 'bg-[#EF4444]/10 text-[#EF4444] border-[#EF4444]/30' : isMedRisk ? 'bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/30' : 'bg-[#10B981]/10 text-[#10B981] border-[#10B981]/30';
+  const scoreColorClass = isClean ? 'text-[#81c784]' : isMedRisk ? 'text-[#f59e0b]' : 'text-[#ffb4ab]';
+  const gaugeBorderClass = isClean ? 'border-[#81c784]' : isMedRisk ? 'border-[#f59e0b]' : 'border-[#ffb4ab]';
+  const badgeBgClass = isClean ? 'bg-[#81c784]/10 text-[#81c784] border-[#81c784]/30' : isMedRisk ? 'bg-[#f59e0b]/10 text-[#f59e0b] border-[#f59e0b]/30' : 'bg-[#ffb4ab]/10 text-[#ffb4ab] border-[#ffb4ab]/30';
+
+  const spfPass = (authProof && authProof.spf === 'PASS') || authStatus.spf.status === 'VERIFIED';
+  const dkimPass = (authProof && authProof.dkim && authProof.dkim.includes('PASS')) || authStatus.dkim.status === 'VERIFIED';
+  const dmarcPass = (authProof && authProof.dmarc === 'PASS') || authStatus.dmarc.status === 'VERIFIED';
+
+  const extractDomain = (str) => {
+    const match = (str || '').match(/@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+    return match ? match[1] : '';
+  };
+  const senderDomain = extractDomain(sender);
 
   return `
     <section class="py-16 max-w-7xl mx-auto px-6 lg:px-12 border-t border-[#24282D]/60">
       
+      <!-- Explicit Authentication Proof Badge Bar -->
+      <div class="mb-8 p-4 rounded-xl ${isClean ? 'bg-[#81c784]/10 border border-[#81c784]/30' : isMedRisk ? 'bg-[#f59e0b]/10 border border-[#f59e0b]/30' : 'bg-[#ffb4ab]/10 border border-[#ffb4ab]/30'} flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-xl ${scoreColorClass}">
+            ${isClean ? 'verified_user' : isMedRisk ? 'gpp_maybe' : 'gpp_bad'}
+          </span>
+          <div>
+            <div class="text-xs font-mono font-bold uppercase tracking-wider text-white">Authentication Proof Bar</div>
+            <div class="text-[11px] text-[#9CA3AF] font-mono">
+              ${isClean ? 'All RFC cryptographic checks passed & domain aligned safely' : isMedRisk ? 'Unverified relay node or policy warning detected' : 'Cryptographic authentication or alignment failed'}
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5 text-xs font-mono">
+          <span class="px-3 py-1 rounded-lg ${spfPass ? 'bg-[#81c784]/20 text-[#81c784] border border-[#81c784]/40' : 'bg-[#ffb4ab]/20 text-[#ffb4ab] border border-[#ffb4ab]/40'} font-bold flex items-center gap-1">
+            SPF ${spfPass ? '[✔ Pass]' : '[✖ Fail]'}
+          </span>
+          <span class="px-3 py-1 rounded-lg ${dkimPass ? 'bg-[#81c784]/20 text-[#81c784] border border-[#81c784]/40' : 'bg-[#ffb4ab]/20 text-[#ffb4ab] border border-[#ffb4ab]/40'} font-bold flex items-center gap-1">
+            DKIM ${dkimPass ? `[✔ Signed: ${senderDomain || 'Verified'}]` : '[✖ Fail]'}
+          </span>
+          <span class="px-3 py-1 rounded-lg ${dmarcPass ? 'bg-[#81c784]/20 text-[#81c784] border border-[#81c784]/40' : 'bg-[#ffb4ab]/20 text-[#ffb4ab] border border-[#ffb4ab]/40'} font-bold flex items-center gap-1">
+            DMARC ${dmarcPass ? '[✔ Aligned]' : '[✖ Fail]'}
+          </span>
+        </div>
+      </div>
+
       <!-- Threat Result Header -->
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div class="space-y-2">
@@ -68,7 +111,7 @@ export function renderThreatResult({ activeEmail, hasAnalyzedFile = true }) {
             <span class="text-xs font-mono uppercase text-[#9CA3AF]">THREAT SCORE ENGINE</span>
             
             <div class="flex items-center justify-center py-4">
-              <div class="relative w-36 h-36 flex items-center justify-center rounded-full border-4 ${isHighRisk ? 'border-[#EF4444]' : isMedRisk ? 'border-[#F59E0B]' : 'border-[#10B981]'} bg-[#08090B]">
+              <div class="relative w-36 h-36 flex items-center justify-center rounded-full border-4 ${gaugeBorderClass} bg-[#08090B]">
                 <div class="text-center">
                   <span class="text-4xl font-extrabold font-mono ${scoreColorClass}">${riskScore}</span>
                   <span class="text-[11px] font-mono text-[#9CA3AF] block uppercase mt-0.5">SCORE</span>
@@ -80,8 +123,8 @@ export function renderThreatResult({ activeEmail, hasAnalyzedFile = true }) {
               ${isHighRisk 
                 ? 'High severity threat detected. Urgent quarantine and executive alert recommended.' 
                 : isMedRisk 
-                ? 'Moderate threat signals. Manual SOC verification suggested.' 
-                : 'Clean email payload. No spoofing or malintent detected.'}
+                ? 'Moderate threat signals or unverified relay. Manual SOC verification suggested.' 
+                : 'Safe & authenticated email payload. SPF, DKIM, and DMARC alignment verified.'}
             </p>
           </div>
 
