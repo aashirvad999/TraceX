@@ -16,6 +16,14 @@ import { renderTimeline } from './components/timeline.js?v=114';
 import { renderEvidenceChain } from './components/evidenceChain.js?v=114';
 import { renderForensicReport } from './components/forensicReport.js?v=114';
 import { AmbientGlow } from './components/ambientGlow.js?v=114';
+import { 
+  computeSHA256, 
+  createEvidenceBlock, 
+  getLedger, 
+  verifyLedgerIntegrity, 
+  toggleTamperLatestBlock, 
+  seedInitialGenesisBlock 
+} from './services/blockchainVault.js?v=114';
 
 // Dynamic Real-Time EML Parser & AI Threat Diagnostics Engine (RFC Header-Priority Pipeline)
 function parseEmlContent(rawText, fileName = "uploaded_payload.eml") {
@@ -137,13 +145,11 @@ function parseEmlContent(rawText, fileName = "uploaded_payload.eml") {
   }
 
   // Step B: Intent & URL Mismatch Analysis (Context-Aware NLP)
-  // Extract URLs from body
   const extractedUrls = bodyText.match(/https?:\/\/[^\s<">]+/g) || bodyText.match(/hxxps?:\/\/[^\s<">]+/g) || [];
   let deceptiveLinkMismatch = false;
 
   for (let urlStr of extractedUrls) {
     const cleanUrl = urlStr.toLowerCase().replace('hxxp', 'http');
-    // Flag if link displays trusted domain text (e.g. sbi.co.in or paypal.com) but points to IP address or external unverified domain
     const isIpLink = /\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(cleanUrl);
     if (isIpLink || (cleanUrl.includes("sbi") && !cleanUrl.includes("sbi.co.in")) || (cleanUrl.includes("paypal") && !cleanUrl.includes("paypal.com"))) {
       if (!isFullyAuthenticated) {
@@ -261,10 +267,27 @@ class TraceXApp {
     this.timelineEvents = [...TIMELINE_EVENTS];
     this.observer = null;
     this.ambientGlow = new AmbientGlow();
+    this.ledger = [];
+    this.verificationResult = null;
+    this.showAllIocs = false;
+    this.showAllTimeline = false;
   }
 
-  init() {
+  async init() {
+    await seedInitialGenesisBlock();
     this.loadStateFromLocalStorage();
+    
+    this.ledger = getLedger();
+    this.verificationResult = await verifyLedgerIntegrity(this.ledger);
+
+    if (this.ledger && this.ledger.length > 0) {
+      const latestBlock = this.ledger[this.ledger.length - 1];
+      this.currentCase.blockHeight = latestBlock.blockHeight;
+      this.currentCase.currentHash = latestBlock.currentHash;
+      this.currentCase.prevHash = latestBlock.prevHash;
+      this.currentCase.sha256 = latestBlock.currentHash;
+    }
+
     this.renderShell();
     this.renderMainContent();
     this.attachGlobalEvents();
@@ -387,13 +410,13 @@ class TraceXApp {
         ${renderHeaderForensics(this.activeEmail, this.hasAnalyzedFile)}
         ${renderMapVisualizer(this.activeEmail ? this.activeEmail.originGeo : {}, this.hasAnalyzedFile)}
         ${renderInvestigationGraph(this.graphData, this.hasAnalyzedFile)}
-        ${renderIocMatrix(this.iocs, this.hasAnalyzedFile)}
+        ${renderIocMatrix(this.iocs, this.hasAnalyzedFile, this.showAllIocs)}
       </section>
 
       <!-- 05. Digital Forensics Section -->
       <section id="forensics" class="scroll-mt-24">
-        ${renderTimeline(this.timelineEvents, this.hasAnalyzedFile)}
-        ${renderEvidenceChain(this.currentCase, this.hasAnalyzedFile)}
+        ${renderTimeline(this.timelineEvents, this.hasAnalyzedFile, this.showAllTimeline)}
+        ${renderEvidenceChain(this.currentCase, this.hasAnalyzedFile, this.ledger, this.verificationResult)}
         ${renderForensicReport(this.currentCase, this.activeEmail, this.hasAnalyzedFile)}
       </section>
     `;
@@ -417,7 +440,7 @@ class TraceXApp {
   }
 
   setupScrollSpy() {
-    const sectionIds = ["platform", "analyze", "how-it-works", "sih-project", "threat-intelligence", "forensics"];
+    const sectionIds = ["platform", "analyze", "how-it-works", "threat-intelligence", "forensics"];
     const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
 
     if (!sections.length) return;
@@ -545,7 +568,7 @@ class TraceXApp {
   }
 
   // Execute Dynamic Analysis on Raw Text / Uploaded File & Persist State
-  executeAnalysisForContent(rawText, fileName = "uploaded_payload.eml") {
+  async executeAnalysisForContent(rawText, fileName = "uploaded_payload.eml") {
     if (!rawText || rawText.trim() === '') {
       rawText = this.sampleEmails[0].rawHeaders + "\n\n" + this.sampleEmails[0].body;
     }
@@ -553,11 +576,23 @@ class TraceXApp {
     const parsedEmail = parseEmlContent(rawText, fileName);
     this.activeEmail = parsedEmail;
     this.hasAnalyzedFile = true;
+    this.showAllIocs = false;
+    this.showAllTimeline = false;
 
     this.currentCase.id = `CASE-${Date.now().toString().slice(-4)}`;
     this.currentCase.title = parsedEmail.title;
     this.currentCase.fileName = fileName;
+
+    // Create client-side cryptographic evidence block in localStorage ledger
+    const block = await createEvidenceBlock(this.currentCase.id, rawText, parsedEmail.title);
+    this.currentCase.blockHeight = block.blockHeight;
+    this.currentCase.currentHash = block.currentHash;
+    this.currentCase.prevHash = block.prevHash;
+    this.currentCase.sha256 = block.currentHash;
     this.currentCase.status = "VERIFIED";
+
+    this.ledger = getLedger();
+    this.verificationResult = await verifyLedgerIntegrity(this.ledger);
 
     // Add to fileHistory array if not present
     const existingIdx = this.fileHistory.findIndex(item => item.fileName === fileName);
@@ -603,7 +638,7 @@ class TraceXApp {
     // Clear History Button Handler
     const btnClearHistory = document.getElementById("btn-clear-history");
     if (btnClearHistory) {
-      btnClearHistory.addEventListener("click", () => {
+      btnClearHistory.addEventListener("click", async () => {
         this.fileHistory = [];
         this.activeEmail = null;
         this.hasAnalyzedFile = false;
@@ -616,6 +651,11 @@ class TraceXApp {
         localStorage.removeItem("tracex_current_case");
         localStorage.removeItem("tracex_uploaded_file_name");
         localStorage.removeItem("tracex_uploaded_file_text");
+        localStorage.removeItem("tracex_ledger");
+
+        await seedInitialGenesisBlock();
+        this.ledger = getLedger();
+        this.verificationResult = await verifyLedgerIntegrity(this.ledger);
 
         this.renderMainContent();
       });
@@ -743,18 +783,6 @@ class TraceXApp {
         const txtArea = document.getElementById("raw-email-input");
         const textToAnalyze = this.uploadedFileText || (txtArea ? txtArea.value : "");
         const fileNameToAnalyze = this.uploadedFileName || "uploaded_evidence.eml";
-        
-        this.executeAnalysisForContent(textToAnalyze, fileNameToAnalyze);
-      });
-    }
-
-    // Main "Run AI Threat Analysis" Button Handler
-    const btnRunAnalysis = document.getElementById("btn-run-analysis");
-    if (btnRunAnalysis) {
-      btnRunAnalysis.addEventListener("click", () => {
-        const txtArea = document.getElementById("raw-email-input");
-        const textToAnalyze = this.uploadedFileText || (txtArea ? txtArea.value : "");
-        const fileNameToAnalyze = this.uploadedFileName || "custom_raw_header_payload.eml";
         
         this.executeAnalysisForContent(textToAnalyze, fileNameToAnalyze);
       });
@@ -902,12 +930,19 @@ class TraceXApp {
       });
     });
 
+    // Blockchain Chain of Custody Handlers
     const btnVerify = document.getElementById("btn-verify-integrity");
     const btnTamper = document.getElementById("btn-tamper-toggle");
 
     if (btnVerify) {
-      btnVerify.addEventListener("click", () => {
-        this.currentCase.status = "VERIFIED";
+      btnVerify.addEventListener("click", async () => {
+        this.ledger = getLedger();
+        this.verificationResult = await verifyLedgerIntegrity(this.ledger);
+        if (this.verificationResult.isValid) {
+          this.currentCase.status = "VERIFIED";
+        } else {
+          this.currentCase.status = "TAMPERED";
+        }
         this.saveStateToLocalStorage();
         this.renderMainContent();
         document.getElementById("forensics")?.scrollIntoView({ behavior: "smooth" });
@@ -915,8 +950,15 @@ class TraceXApp {
     }
 
     if (btnTamper) {
-      btnTamper.addEventListener("click", () => {
-        this.currentCase.status = (this.currentCase.status === "VERIFIED") ? "TAMPERED" : "VERIFIED";
+      btnTamper.addEventListener("click", async () => {
+        toggleTamperLatestBlock();
+        this.ledger = getLedger();
+        this.verificationResult = await verifyLedgerIntegrity(this.ledger);
+        if (this.verificationResult.isValid) {
+          this.currentCase.status = "VERIFIED";
+        } else {
+          this.currentCase.status = "TAMPERED";
+        }
         this.saveStateToLocalStorage();
         this.renderMainContent();
         document.getElementById("forensics")?.scrollIntoView({ behavior: "smooth" });
@@ -936,6 +978,8 @@ class TraceXApp {
         const bundle = {
           case: this.currentCase,
           email: this.activeEmail,
+          blockchainLedger: this.ledger,
+          verificationResult: this.verificationResult,
           iocs: this.iocs,
           graph: this.graphData,
           timeline: this.timelineEvents
@@ -962,6 +1006,28 @@ class TraceXApp {
         }
       });
     });
+
+    // Toggle IOC Expansion Handler
+    const btnToggleIoc = document.getElementById("btn-toggle-ioc-expansion");
+    if (btnToggleIoc) {
+      btnToggleIoc.addEventListener("click", () => {
+        this.showAllIocs = !this.showAllIocs;
+        const scrollPos = window.scrollY;
+        this.renderMainContent();
+        window.scrollTo({ top: scrollPos, behavior: 'instant' });
+      });
+    }
+
+    // Toggle Timeline Expansion Handler
+    const btnToggleTimeline = document.getElementById("btn-toggle-timeline-expansion");
+    if (btnToggleTimeline) {
+      btnToggleTimeline.addEventListener("click", () => {
+        this.showAllTimeline = !this.showAllTimeline;
+        const scrollPos = window.scrollY;
+        this.renderMainContent();
+        window.scrollTo({ top: scrollPos, behavior: 'instant' });
+      });
+    }
   }
 }
 

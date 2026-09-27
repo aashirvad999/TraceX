@@ -1,10 +1,10 @@
 # TraceX — AI-Powered Email Threat Detection & Forensic Intelligence
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](file:///c:/temp123/TraceX/index.html)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](file:///c:/temp123/TraceX/index.html)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](#license)
-[![Platform](https://img.shields.io/badge/platform-Web%20%7C%20ES6%20Modules-orange.svg)](file:///c:/temp123/TraceX/index.html)
+[![Platform](https://img.shields.io/badge/platform-Web%20%7C%20Web%20Crypto%20API-orange.svg)](file:///c:/temp123/TraceX/index.html)
 
-**TraceX** is an enterprise-grade cybersecurity web application designed for Security Operations Center (SOC) analysts, email security engineers, and forensic investigators. It provides end-to-end capabilities to ingest suspicious email artifacts (`.eml`), inspect raw headers, trace relay infrastructure, analyze Indicators of Compromise (IOCs), correlate campaign clusters, seal cryptographic chain-of-custody evidence, and generate comprehensive forensic reports.
+**TraceX** is an enterprise-grade cybersecurity web application designed for Security Operations Center (SOC) analysts, email security engineers, and forensic investigators. It provides end-to-end capabilities to ingest suspicious email artifacts (`.eml`), inspect raw headers, trace relay infrastructure, analyze Indicators of Compromise (IOCs), correlate campaign clusters, seal cryptographic chain-of-custody evidence using client-side Web Crypto blockchain ledgers, and generate comprehensive forensic reports.
 
 ---
 
@@ -36,14 +36,14 @@
 * **Visual Relationship Mapping**: Renders node-link visual networks connecting email cases, lookalike domains, anonymizing IP relays, malicious URLs, malware payloads, and campaign clusters (e.g., `#APEX-PHISH-2026`).
 * **Node Detail Inspector**: Click any graph entity to view detailed connection relationships and risk metrics.
 
-### 🔒 Cryptographic Chain of Custody & Evidence Vault
-* **Dual Cryptographic Hashing**: Automatically computes SHA-256 and MD5 hashes upon evidence ingest.
-* **Immutable Audit Trail**: Records read-only operator logs tracking evidence acquisition, hash sealing, and enrichment steps.
-* **Integrity Verification & Tamper Simulation**: Includes interactive verification features to demonstrate hash integrity validation and tamper detection.
+### 🔒 Client-Side Cryptographic Chain-of-Custody & Evidence Vault
+* **Web Crypto API SHA-256 Hashing**: Automatically computes cryptographic SHA-256 signatures for evidence payloads using native `crypto.subtle.digest()`.
+* **Browser-Native Micro-Ledger**: Links evidence blocks (`blockHeight`, `timestamp`, `prevHash`, `currentHash`, `payloadSnippet`, `status`) in a parent-child chain stored in `localStorage` without external server dependencies.
+* **Interactive Integrity Verification & Tamper Simulation**: Includes interactive verification widgets to validate full cryptographic chain integrity or simulate payload tampering.
 
 ### 📄 Executive & Technical Forensic Reporting
-* **Print-Ready PDF Export**: Formatted executive forensic reports ready for instant PDF rendering (`window.print()`).
-* **JSON Incident Bundle Export**: Download full investigation case bundles (case details, active email, IOC matrix, graph data, timeline) as structured JSON files.
+* **Print-Ready PDF Export**: Formatted executive forensic reports featuring the official Blockchain Vault Seal ready for instant PDF rendering (`window.print()`).
+* **JSON Incident Bundle Export**: Download full investigation case bundles (case details, active email, blockchain ledger, IOC matrix, graph data, timeline) as structured JSON files.
 
 ---
 
@@ -57,6 +57,8 @@ TraceX/
 ├── js/
 │   ├── app.js                  # Main TraceXApp controller & router logic
 │   ├── sampleData.js           # Sample incident presets, IOCs, graph & timeline datasets
+│   ├── services/
+│   │   └── blockchainVault.js  # Web Crypto SHA-256 micro-ledger & evidence vault service
 │   └── components/
 │       ├── header.js           # Top navigation bar with active tab controls
 │       ├── mobileNav.js        # Mobile viewport navigation bar
@@ -70,8 +72,8 @@ TraceX/
 │       ├── iocMatrix.js        # Indicators of Compromise table & inspection drawer
 │       ├── investigationGraph.js# SVG node-link investigation graph & detail panel
 │       ├── timeline.js         # Chronological event timeline
-│       ├── evidenceChain.js    # Forensic chain of custody & evidence hash verifier
-│       └── forensicReport.js   # Printable forensic report view & JSON bundle export
+│       ├── evidenceChain.js    # Blockchain micro-ledger & evidence chain verifier
+│       └── forensicReport.js   # Printable forensic report view with blockchain seal & JSON bundle export
 ├── README.md                   # Project overview & documentation
 └── TECHSTACK.md                # Technology stack & development tools specification
 ```
@@ -81,7 +83,7 @@ TraceX/
 ## 🚀 Getting Started
 
 ### Prerequisites
-TraceX is built using native **ES6 JavaScript Modules** and standard **HTML5/CSS3**. It operates entirely client-side in any modern web browser without requiring Node.js build tools, transpilers, or external database setups.
+TraceX is built using native **ES6 JavaScript Modules**, **Web Crypto API**, and standard **HTML5/CSS3**. It operates entirely client-side in any modern web browser without requiring Node.js build tools, transpilers, or external database setups.
 
 ### Running Locally
 To launch TraceX locally, serve the project root folder using any local HTTP web server (required for native JavaScript ES Module imports):
@@ -89,9 +91,9 @@ To launch TraceX locally, serve the project root folder using any local HTTP web
 #### Option 1: Python HTTP Server
 ```bash
 # Python 3.x
-python -m http.server 8000
+python -m http.server 8080
 ```
-Then open `http://localhost:8000` in your web browser.
+Then open `http://localhost:8080` in your web browser.
 
 #### Option 2: Node.js `serve` / `npx`
 ```bash
@@ -113,15 +115,15 @@ flowchart TD
     C --> D[Analyze Header Forensics & Hops]
     D --> E[Review IOC Matrix & Intel]
     E --> F[Explore Network Relationship Graph]
-    F --> G[Verify Chain of Custody Hashes]
-    G --> H[Export Forensic Report PDF / JSON]
+    F --> G[Verify Cryptographic Chain-of-Custody Ledger]
+    G --> H[Export Forensic Report PDF with Blockchain Seal / JSON]
 ```
 
 1. **Ingest**: Select a sample incident preset (e.g., *BEC Financial Fraud*) or drop an `.eml` file into the [Analyzer Component](file:///c:/temp123/TraceX/js/components/analyzer.js).
 2. **Analyze**: Click **Run AI Analysis** to trigger the scanning sequence.
 3. **Investigate**: Explore header authentication results, hop-by-hop relay latency, IOC reputation scores, and the interactive SVG network graph.
-4. **Verify**: Navigate to the Evidence Chain view to confirm cryptographic SHA-256 evidence sealing.
-5. **Report**: Export a print-formatted PDF report or download the complete incident data bundle in JSON format.
+4. **Verify**: Navigate to the Evidence Chain view to confirm cryptographic Web Crypto SHA-256 evidence block sealing and parent hash pointers.
+5. **Report**: Export a print-formatted PDF report featuring the Blockchain Seal or download the complete incident data bundle in JSON format.
 
 ---
 

@@ -1,7 +1,8 @@
-/* TraceX Design System & Utility Styles — Minimal & Premium */
+/* TraceX Design System & Utility Styles — Minimal, Responsive & Premium */
 @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
 :root {
+  color-scheme: dark;
   --bg-dark: #08090B;
   --bg-surface: #101214;
   --bg-subtle: #15181C;
@@ -12,6 +13,14 @@
   --threat-red: #EF4444;
   --threat-amber: #F59E0B;
   --threat-green: #10B981;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -25,7 +34,12 @@ body {
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* Mouse-Following Ambient Warm Amber Glow Aura */
+/* Touch Momentum Scrolling */
+.scrollbar-thin {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mouse-Following Ambient Warm Amber Glow Aura with Smooth Idle Transitions */
 #ambient-glow {
   position: fixed;
   top: 0;
@@ -37,19 +51,24 @@ body {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(214, 168, 79, 0.12) 0%,
-    rgba(214, 168, 79, 0.04) 40%,
+    rgba(245, 158, 11, 0.18) 0%,
+    rgba(214, 168, 79, 0.05) 45%,
     rgba(214, 168, 79, 0) 70%
   );
   pointer-events: none;
   z-index: 99999;
   will-change: transform, opacity;
-  opacity: 0.8;
-  transition: opacity 0.3s ease;
+  opacity: 0.85;
+  transition: opacity 0.5s ease-in;
 }
 
 #ambient-glow.interactive-hover {
   opacity: 1.05;
+}
+
+#ambient-glow.glow-idle {
+  opacity: 0 !important;
+  transition: opacity 1.2s ease-out !important;
 }
 
 @media (pointer: coarse) {
@@ -78,7 +97,7 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
-/* Nav Link Active State (Color Smooth Transition) */
+/* Nav Link Active State */
 .nav-link {
   position: relative;
   color: #9CA3AF;
@@ -115,12 +134,12 @@ body {
 }
 
 /* SVG Node Graph Styles */
-.graph-node {
+.graph-node-group {
   cursor: pointer;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.graph-node:hover {
+.graph-node-group:hover {
   opacity: 0.95;
 }
 
@@ -139,31 +158,90 @@ body {
   animation: subtle-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Print Styles for Forensic Report */
+/* PDF Print Engine Styles for Production-Grade Dark Forensic Dossier PDF Export */
 @media print {
-  body {
-    background-color: #ffffff !important;
-    color: #000000 !important;
+  @page {
+    size: auto;
+    margin: 8mm;
+    background-color: #08090B !important;
   }
-  header, nav, aside, .no-print, button, #ambient-glow {
-    display: none !important;
+
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-scheme: dark !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
   }
-  main {
+
+  html, body {
+    background-color: #08090B !important;
+    color: #E5E7EB !important;
     margin: 0 !important;
     padding: 0 !important;
+    width: 100% !important;
   }
-  .print-only {
-    display: block !important;
+
+  header, nav, aside, footer, .no-print, button, #ambient-glow, #glow-control-panel, #mobile-menu-drawer, #mobile-nav-container, #header-container, #analysis-modal-backdrop {
+    display: none !important;
   }
-  .bg-surface, .bg-subtle, .bg-[#101214], .bg-[#15181C] {
-    background-color: #ffffff !important;
-    border: 1px solid #ddd !important;
-    color: #000000 !important;
+
+  main, #app-main-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    background-color: #08090B !important;
   }
-  .text-primary, .text-main, .text-[#E5E7EB] {
-    color: #000000 !important;
+
+  #printable-report-card, section, div, article, table, tr, td, th {
+    background-color: #101214 !important;
+    color: #E5E7EB !important;
+    border-color: #24282D !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
-  .text-muted, .text-[#9CA3AF] {
-    color: #555555 !important;
+
+  .bg-\[\#08090B\], .bg-\[\#101214\], .bg-\[\#15181C\], .bg-\[\#1c1b1c\], .bg-\[\#1c1c1e\] {
+    background-color: #08090B !important;
+    color: #E5E7EB !important;
+    border-color: #24282D !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .text-white {
+    color: #FFFFFF !important;
+  }
+  .text-\[\#E5E7EB\] {
+    color: #E5E7EB !important;
+  }
+  .text-\[\#D6A84F\] {
+    color: #D6A84F !important;
+  }
+  .text-\[\#9CA3AF\] {
+    color: #9CA3AF !important;
+  }
+  .text-\[\#10B981\] {
+    color: #10B981 !important;
+  }
+  .text-\[\#F59E0B\] {
+    color: #F59E0B !important;
+  }
+  .text-\[\#EF4444\] {
+    color: #EF4444 !important;
+  }
+  .text-\[\#81c784\] {
+    color: #81c784 !important;
+  }
+  .text-\[\#ffb4ab\] {
+    color: #ffb4ab !important;
+  }
+
+  code, pre {
+    background-color: #15181C !important;
+    color: #D6A84F !important;
+    border-color: #24282D !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }

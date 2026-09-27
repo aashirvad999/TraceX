@@ -1,4 +1,4 @@
-// TraceX - Ambient Mouse-Following Glow Component
+// TraceX - Ambient Mouse-Following Glow Component with Smooth Idle Fade
 
 export class AmbientGlow {
   constructor() {
@@ -8,6 +8,7 @@ export class AmbientGlow {
     this.currentX = this.mouseX;
     this.currentY = this.mouseY;
     this.isHovered = false;
+    this.idleTimer = null;
     this.rafId = null;
     this.isMobileOrReducedMotion = false;
   }
@@ -21,6 +22,12 @@ export class AmbientGlow {
       return;
     }
 
+    // Remove temporary floating control panel if present in DOM
+    const existingPanel = document.getElementById('glow-control-panel');
+    if (existingPanel) {
+      existingPanel.remove();
+    }
+
     this.element = document.getElementById('ambient-glow');
     if (!this.element) {
       this.element = document.createElement('div');
@@ -30,6 +37,25 @@ export class AmbientGlow {
 
     this.attachEvents();
     this.animate();
+    this.resetIdleTimer();
+  }
+
+  resetIdleTimer() {
+    if (!this.element) return;
+
+    // Remove idle class smoothly when cursor moves
+    this.element.classList.remove('glow-idle');
+
+    if (this.idleTimer) {
+      clearTimeout(this.idleTimer);
+    }
+
+    // 2.5s idle fade out timer
+    this.idleTimer = setTimeout(() => {
+      if (this.element) {
+        this.element.classList.add('glow-idle');
+      }
+    }, 2500);
   }
 
   attachEvents() {
@@ -37,8 +63,10 @@ export class AmbientGlow {
       this.mouseX = e.clientX;
       this.mouseY = e.clientY;
 
+      this.resetIdleTimer();
+
       const target = e.target;
-      if (target && target.closest('button, a, input, textarea, [data-nav], [data-sample-idx], [data-hop-index], .btn-inspect-ioc, .graph-node')) {
+      if (target && target.closest('button, a, input, textarea, [data-nav], [data-sample-idx], [data-hop-index], .btn-inspect-ioc, .graph-node-group')) {
         if (!this.isHovered) {
           this.isHovered = true;
           this.element?.classList.add('interactive-hover');
@@ -55,7 +83,7 @@ export class AmbientGlow {
   animate() {
     if (this.isMobileOrReducedMotion) return;
 
-    // Smooth lerp (0.12 factor for subtle fluid inertia)
+    // Smooth lerp (0.12 factor for fluid inertia)
     this.currentX += (this.mouseX - this.currentX) * 0.12;
     this.currentY += (this.mouseY - this.currentY) * 0.12;
 

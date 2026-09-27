@@ -6,7 +6,7 @@ export function renderThreatResult({ activeEmail, hasAnalyzedFile = true }) {
       <section class="py-16 max-w-7xl mx-auto px-6 lg:px-12 border-t border-[#24282D]/60">
         <div class="bg-[#101214] border border-[#24282D] rounded-2xl p-12 text-center space-y-4 shadow-xl">
           <div class="w-16 h-16 rounded-full bg-[#15181C] border border-[#24282D] mx-auto flex items-center justify-center text-[#D6A84F] shadow-inner">
-            <span class="material-symbols-outlined text-3xl">radar</span>
+            <span class="material-symbols-outlined text-3xl">shield</span>
           </div>
           <div class="space-y-1">
             <h3 class="text-xl font-bold text-white">No Email Evidence Analyzed Yet</h3>
@@ -25,10 +25,6 @@ export function renderThreatResult({ activeEmail, hasAnalyzedFile = true }) {
 
   const { title, riskScore, classification, confidence, sender, replyTo, returnPath, messageId, date, subject, authStatus, authProof } = activeEmail;
 
-  // 3-Tier Score & Color Coding Calibration:
-  // 0–25: Green (#81c784) "Safe & Authenticated"
-  // 26–60: Amber (#f59e0b) "Unverified Relay or Policy Warning"
-  // 61–100: Red (#ffb4ab) "Malicious Phishing / BEC Impersonation"
   const isClean = riskScore <= 25;
   const isMedRisk = riskScore > 25 && riskScore <= 60;
   const isHighRisk = riskScore > 60;
@@ -50,29 +46,24 @@ export function renderThreatResult({ activeEmail, hasAnalyzedFile = true }) {
   return `
     <section class="py-16 max-w-7xl mx-auto px-6 lg:px-12 border-t border-[#24282D]/60">
       
-      <!-- Explicit Authentication Proof Badge Bar -->
-      <div class="mb-8 p-4 rounded-xl ${isClean ? 'bg-[#81c784]/10 border border-[#81c784]/30' : isMedRisk ? 'bg-[#f59e0b]/10 border border-[#f59e0b]/30' : 'bg-[#ffb4ab]/10 border border-[#ffb4ab]/30'} flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
+      <!-- Decluttered Authentication Proof Badge Bar -->
+      <div class="mb-8 p-3.5 sm:p-4 rounded-xl ${isClean ? 'bg-[#81c784]/10 border border-[#81c784]/30' : isMedRisk ? 'bg-[#f59e0b]/10 border border-[#f59e0b]/30' : 'bg-[#ffb4ab]/10 border border-[#ffb4ab]/30'} flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
         <div class="flex items-center gap-2.5">
-          <span class="material-symbols-outlined text-xl ${scoreColorClass}">
+          <span class="material-symbols-outlined text-lg sm:text-xl ${scoreColorClass}">
             ${isClean ? 'verified_user' : isMedRisk ? 'gpp_maybe' : 'gpp_bad'}
           </span>
-          <div>
-            <div class="text-xs font-mono font-bold uppercase tracking-wider text-white">Authentication Proof Bar</div>
-            <div class="text-[11px] text-[#9CA3AF] font-mono">
-              ${isClean ? 'All RFC cryptographic checks passed & domain aligned safely' : isMedRisk ? 'Unverified relay node or policy warning detected' : 'Cryptographic authentication or alignment failed'}
-            </div>
-          </div>
+          <span class="text-xs font-mono font-bold uppercase tracking-wider text-white">AUTH PROOF</span>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2.5 text-xs font-mono">
-          <span class="px-3 py-1 rounded-lg ${spfPass ? 'bg-[#81c784]/20 text-[#81c784] border border-[#81c784]/40' : 'bg-[#ffb4ab]/20 text-[#ffb4ab] border border-[#ffb4ab]/40'} font-bold flex items-center gap-1">
-            SPF ${spfPass ? '[✔ Pass]' : '[✖ Fail]'}
+        <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
+          <span class="px-2.5 py-1 rounded-lg ${spfPass ? 'bg-[#81c784]/20 text-[#81c784] border border-[#81c784]/40' : 'bg-[#ffb4ab]/20 text-[#ffb4ab] border border-[#ffb4ab]/40'} font-bold flex items-center gap-1">
+            ✔ SPF: ${spfPass ? 'Pass' : 'Fail'}
           </span>
-          <span class="px-3 py-1 rounded-lg ${dkimPass ? 'bg-[#81c784]/20 text-[#81c784] border border-[#81c784]/40' : 'bg-[#ffb4ab]/20 text-[#ffb4ab] border border-[#ffb4ab]/40'} font-bold flex items-center gap-1">
-            DKIM ${dkimPass ? `[✔ Signed: ${senderDomain || 'Verified'}]` : '[✖ Fail]'}
+          <span class="px-2.5 py-1 rounded-lg ${dkimPass ? 'bg-[#81c784]/20 text-[#81c784] border border-[#81c784]/40' : 'bg-[#ffb4ab]/20 text-[#ffb4ab] border border-[#ffb4ab]/40'} font-bold flex items-center gap-1">
+            ✔ DKIM: ${dkimPass ? `Signed (@${senderDomain || 'Verified'})` : 'Fail'}
           </span>
-          <span class="px-3 py-1 rounded-lg ${dmarcPass ? 'bg-[#81c784]/20 text-[#81c784] border border-[#81c784]/40' : 'bg-[#ffb4ab]/20 text-[#ffb4ab] border border-[#ffb4ab]/40'} font-bold flex items-center gap-1">
-            DMARC ${dmarcPass ? '[✔ Aligned]' : '[✖ Fail]'}
+          <span class="px-2.5 py-1 rounded-lg ${dmarcPass ? 'bg-[#81c784]/20 text-[#81c784] border border-[#81c784]/40' : 'bg-[#ffb4ab]/20 text-[#ffb4ab] border border-[#ffb4ab]/40'} font-bold flex items-center gap-1">
+            ✔ DMARC: ${dmarcPass ? 'Aligned' : 'Fail'}
           </span>
         </div>
       </div>

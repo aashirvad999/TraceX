@@ -7,9 +7,9 @@ export function renderAnalysisModal() {
       <div class="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(#8f9194_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
       <div class="max-w-md w-full mx-auto text-center relative z-10 space-y-6">
-        <!-- Radar Radar Animation Icon -->
+        <!-- Animation Icon -->
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#1c1c1e] border border-[#45474a] relative shadow-2xl">
-          <span class="material-symbols-outlined text-[#64d2ff] text-3xl animate-pulse">radar</span>
+          <span class="material-symbols-outlined text-[#64d2ff] text-3xl animate-pulse">analytics</span>
           <div class="absolute inset-0 rounded-full border border-[#64d2ff] animate-ping opacity-20"></div>
         </div>
 

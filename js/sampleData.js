@@ -162,7 +162,7 @@ State Bank of India Online Security Division`,
     },
     relayHops: [
       { step: 1, label: "Rogue VPS Relay", node: "Malicious Bulletproof Host", ip: "185.220.101.5", country: "Netherlands (NL)", asn: "AS60729 TorExit/Proxy", timestamp: "10:59:55 UTC", latency: "0ms", status: "HIGH-RISK", detail: "Known malicious IP host broadcasting spoofed headers." },
-      { step: 2, label: "Target MX Ingress", node: "Customer MX Gateway", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "11:00:00 UTC", latency: "+5ms", status: "SAFE", detail: "Intercepted by TraceX Automated Agent." }
+      { step: 2, label: "Target MX Ingress", node: "Customer MX Gateway", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "11:00:00 UTC", latency: "+5ms", status: "SAFE", detail: "Intercepted by Tracex Automated Agent." }
     ],
     originGeo: {
       sendingNode: "Amsterdam, Netherlands (Attacker Relay VPS)",
@@ -222,7 +222,7 @@ Chief Executive Officer`,
     relayHops: [
       { step: 1, label: "Origin Sending Node", node: "Mumbai Attacker Subnet", ip: "103.142.18.99", country: "India (IN)", asn: "AS133202 FastNet", timestamp: "09:40:51 UTC", latency: "0ms", status: "SUSPICIOUS", detail: "X-Originating-IP source node. Known bulletproof VPN endpoint." },
       { step: 2, label: "Intermediate Relay", node: "Amsterdam VPN Node", ip: "185.220.101.5", country: "Netherlands (NL)", asn: "AS60729 TorExit", timestamp: "09:40:58 UTC", latency: "+7ms", status: "HIGH-RISK", detail: "Anonymizing tunnel node with active threat reputation flags." },
-      { step: 3, label: "Target MX Ingress", node: "Customer MX Gateway", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "09:41:03 UTC", latency: "+5ms", status: "SAFE", detail: "Quarantined by TraceX Automated Agent." }
+      { step: 3, label: "Target MX Ingress", node: "Customer MX Gateway", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "09:41:03 UTC", latency: "+5ms", status: "SAFE", detail: "Quarantined by Tracex Automated Agent." }
     ],
     originGeo: {
       sendingNode: "Mumbai, MH, India",
@@ -260,14 +260,14 @@ export const SAMPLE_IOCS = [
 
 export const INVESTIGATION_GRAPH_DATA = {
   nodes: [
-    { id: "n-email", label: "CASE-2026-0042 (.eml)", type: "Email", risk: "HIGH", color: "#ffb4ab", details: "Wire Transfer BEC Phish" },
-    { id: "n-domain1", label: "paypa1-secure.com", type: "Domain", risk: "HIGH", color: "#ffb4ab", details: "Lookalike registered Aug 31" },
-    { id: "n-domain2", label: "another-domain.com", type: "Domain", risk: "MEDIUM", color: "#ffb74d", details: "Reply-To Destination" },
-    { id: "n-ip1", label: "185.220.101.5", type: "IP", risk: "HIGH", color: "#ffb4ab", details: "Amsterdam Relay Node" },
-    { id: "n-ip2", label: "103.142.18.99", type: "IP", risk: "HIGH", color: "#ffb4ab", details: "Mumbai Originating Host" },
-    { id: "n-url", label: "auth-gate.paypa1-secure.com", type: "URL", risk: "HIGH", color: "#ffb4ab", details: "Phishing Landing Portal" },
-    { id: "n-attach", label: "wire_invoice.pdf.exe", type: "Attachment", risk: "HIGH", color: "#ffb4ab", details: "Malicious Trojan Dropper" },
-    { id: "n-[#campaign]", label: "Campaign #APEX-PHISH-2026", type: "Campaign", risk: "HIGH", color: "#64d2ff", details: "7 Correlated Incidents across 3 Enterprises" }
+    { id: "n-email", label: "CASE-2026-0042 (.eml)", type: "Email", risk: "HIGH", color: "#EF4444", details: "Wire Transfer BEC Phish Payload", x: 300, y: 150, size: 20 },
+    { id: "n-domain1", label: "paypa1-secure.com", type: "Domain", risk: "HIGH", color: "#EF4444", details: "Lookalike typosquat domain registered Aug 31", x: 140, y: 90, size: 16 },
+    { id: "n-domain2", label: "another-domain.com", type: "Domain", risk: "MEDIUM", color: "#F59E0B", details: "Reply-To Destination header", x: 460, y: 90, size: 16 },
+    { id: "n-ip1", label: "185.220.101.5", type: "IP", risk: "HIGH", color: "#EF4444", details: "Amsterdam Anonymizing Relay Node", x: 90, y: 230, size: 16 },
+    { id: "n-ip2", label: "103.142.18.99", type: "IP", risk: "HIGH", color: "#EF4444", details: "Mumbai Originating Host Subnet", x: 180, y: 330, size: 16 },
+    { id: "n-url", label: "auth-gate.paypa1-secure.com", type: "URL", risk: "HIGH", color: "#EF4444", details: "Credential Harvesting Phishing Portal", x: 300, y: 340, size: 16 },
+    { id: "n-attach", label: "wire_invoice.pdf.exe", type: "Attachment", risk: "HIGH", color: "#EF4444", details: "Malicious Trojan Payload Dropper", x: 510, y: 230, size: 16 },
+    { id: "n-[#campaign]", label: "Campaign #APEX-PHISH-2026", type: "Campaign", risk: "HIGH", color: "#D6A84F", details: "7 Correlated Incidents across 3 Enterprises", x: 440, y: 330, size: 18 }
   ],
   links: [
     { source: "n-email", target: "n-domain1", label: "sent_from" },
@@ -282,15 +282,15 @@ export const INVESTIGATION_GRAPH_DATA = {
 };
 
 export const TIMELINE_EVENTS = [
-  { time: "09:41:03.120", event: "Email Received & Quarantined", status: "INGEST", detail: "Suspicious message intercepted at perimeter edge gateway mx.target-corp.com." },
-  { time: "09:41:03.850", event: "Cryptographic Evidence Sealed", status: "PRESERVE", detail: "SHA-256 (8f92b7c4...) & MD5 hashes calculated and written to immutable ledger." },
-  { time: "09:41:04.012", event: "SPF Authentication Failure", status: "AUTH_FAIL", detail: "Header check: IP 103.142.18.99 failed SPF alignment for domain paypa1-secure.com." },
-  { time: "09:41:04.115", event: "DKIM Signature Invalid", status: "AUTH_FAIL", detail: "RSA public key lookup mismatch. Message body hash verification failed." },
-  { time: "09:41:04.290", event: "DMARC Policy Enforcement Triggered", status: "POLICY", detail: "Policy action: QUARANTINE enforced due to envelope alignment failure." },
-  { time: "09:41:05.045", event: "Lookalike Domain Typosquatting Flagged", status: "THREAT", detail: "Detected character substitution '1' for 'l' in paypa1-secure.com (Score: 94/100)." },
-  { time: "09:41:06.110", event: "Infrastructure Relay Path Traced", status: "TRACE", detail: "Routed across 4 hops: Mumbai (103.142.18.99) -> Amsterdam VPN (185.220.101.5)." },
-  { time: "09:41:07.450", event: "Campaign Correlation Identified", status: "CORRELATE", detail: "Matched 7 historical cases under Campaign #APEX-PHISH-2026 (Confidence: 86%)." },
-  { time: "09:41:08.000", event: "Forensic Case Created & Report Rendered", status: "CASE", detail: "Automated Case CASE-2026-0042 compiled. Risk score 94/100." }
+  { timestamp: "09:41:03.120", title: "Email Received & Quarantined", severity: "HIGH", description: "Suspicious message intercepted at perimeter edge gateway mx.target-corp.com.", source: "Perimeter Gateway", ip: "198.51.100.42" },
+  { timestamp: "09:41:03.850", title: "Cryptographic Evidence Block Sealed", severity: "SAFE", description: "SHA-256 seal calculated and written to browser Web Crypto micro-ledger.", source: "Blockchain Vault", ip: "Local Engine" },
+  { timestamp: "09:41:04.012", title: "SPF Authentication Failure", severity: "HIGH", description: "Header check: IP 103.142.18.99 failed SPF alignment for domain paypa1-secure.com.", source: "SPF Engine", ip: "103.142.18.99" },
+  { timestamp: "09:41:04.115", title: "DKIM Signature Invalid", severity: "HIGH", description: "RSA public key lookup mismatch. Message body hash verification failed.", source: "DKIM Verifier", ip: "185.220.101.5" },
+  { timestamp: "09:41:04.290", title: "DMARC Policy Enforcement Triggered", severity: "HIGH", description: "Policy action: QUARANTINE enforced due to envelope alignment failure.", source: "DMARC Evaluator", ip: "198.51.100.42" },
+  { timestamp: "09:41:05.045", title: "Lookalike Domain Typosquatting Flagged", severity: "HIGH", description: "Detected character substitution '1' for 'l' in paypa1-secure.com (Risk: 94/100).", source: "Domain Diagnostics", ip: "paypa1-secure.com" },
+  { timestamp: "09:41:06.110", title: "Infrastructure Relay Path Traced", severity: "MED", description: "Routed across 3 hops: Mumbai (103.142.18.99) -> Amsterdam VPN (185.220.101.5).", source: "Header Parser", ip: "185.220.101.5" },
+  { timestamp: "09:41:07.450", title: "Campaign Cluster Correlated", severity: "MED", description: "Matched 7 historical cases under Campaign #APEX-PHISH-2026 (Confidence: 93%).", source: "Threat Intel Sync", ip: "185.220.101.5" },
+  { timestamp: "09:41:08.000", title: "Forensic Case Dossier Rendered", severity: "SAFE", description: "Automated Case CASE-2026-0042 compiled. Risk score 94/100.", source: "Tracex SOC Core", ip: "127.0.0.1" }
 ];
 
 export const EVIDENCE_CHAIN_LOGS = [

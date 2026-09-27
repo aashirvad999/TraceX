@@ -10,18 +10,7 @@ export function renderMobileNav() {
         <button data-nav="how-it-works" class="mobile-nav-link text-left py-2 hover:text-white transition-colors">
           How It Works
         </button>
-        <button data-nav="sih-project" class="mobile-nav-link text-left py-2 hover:text-white transition-colors">
-          About SIH Project
-        </button>
       </nav>
-
-      <div class="pt-4 border-t border-[#24282D]">
-        <button data-nav="analyze" class="w-full py-3 rounded-xl bg-[#D6A84F] hover:bg-[#C2943E] text-[#08090B] font-extrabold text-sm transition-colors text-center flex items-center justify-center gap-2">
-          <span class="material-symbols-outlined text-lg">upload_file</span>
-          Upload & Analyze .eml
-        </button>
-      </div>
     </div>
   `;
 }
-
