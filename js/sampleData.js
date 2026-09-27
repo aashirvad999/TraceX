@@ -1,239 +1,217 @@
-// TraceX - Sample Cybersecurity Threat & Forensic Data
+// TraceX - Sample Cybersecurity Threat & Forensic Data (SIH Evaluator Test Suite)
 
-export const SAMPLE_EMAILS = [
-  {
-    id: "spotify-login-01",
-    fileName: "spotify_security_alert.eml",
-    title: "Spotify Security Alert - New Device Login Notice",
-    riskScore: 8,
+export const SAMPLE_EMAILS = {
+  sbi_clean: {
+    id: "sbi_clean",
+    fileName: "sbi_branch_operations.eml",
+    title: "SBI Customer Advisory",
+    riskScore: 5,
     classification: "CLEAN TRANSACTIONAL",
     confidence: "99%",
-    sender: "Spotify Security <no-reply@spotify.com>",
-    replyTo: "no-reply@spotify.com",
-    returnPath: "bounce@spotify.com",
-    messageId: "<20260927.104211.8821@spotify.com>",
-    date: "2026-09-27 10:42:11 UTC",
-    subject: "New login to Spotify from Chrome on Windows",
-    rawHeaders: `Received: from mail-relay.spotify.com (198.22.240.12) by mx.target-corp.com with ESMTPS; Sun, 27 Sep 2026 10:42:11 +0000
-From: Spotify Security <no-reply@spotify.com>
-To: User <user@target-corp.com>
-Reply-To: no-reply@spotify.com
-Return-Path: bounce@spotify.com
-Subject: New login to Spotify from Chrome on Windows
-Date: Sun, 27 Sep 2026 10:42:11 +0000
-Message-ID: <20260927.104211.8821@spotify.com>
-Authentication-Results: mx.target-corp.com; spf=pass (sender 198.22.240.12 verified); dkim=pass (header.i=@spotify.com); dmarc=pass (p=reject)
-Received-SPF: pass (spotify.com: domain of bounce@spotify.com designates 198.22.240.12 as permitted sender)
-DKIM-Signature: v=1; a=rsa-sha256; d=spotify.com; s=s1; c=relaxed/relaxed;`,
-    body: `Hi User,
+    sender: "State Bank of India <notifications@communications.sbi.co.in>",
+    replyTo: "notifications@communications.sbi.co.in",
+    returnPath: "notifications@communications.sbi.co.in",
+    messageId: "<sbi-notice-20260927-99120@communications.sbi.co.in>",
+    date: "2026-09-27 09:15:00 UTC",
+    subject: "SBI Customer Advisory: Branch Operations Notice",
+    badge: "SAFE • 05/100",
+    badgeClass: "text-[#10B981] border-[#10B981]/30 bg-[#10B981]/10",
+    description: "Validates false-positive prevention on signed institutional notices (SPF/DKIM/DMARC Pass).",
+    rawContent: `Received: from mail-out-02.sbi.co.in (mail-out-02.sbi.co.in [115.240.236.42])
+    by mx.target-enterprise.in (Postfix) with ESMTPS id 4Zb9Kq2M15z8Q
+    for <employee@target-enterprise.in>; Sun, 27 Sep 2026 09:15:20 +0530
+Authentication-Results: mx.target-enterprise.in;
+    spf=pass (mx.target-enterprise.in: domain of notifications@communications.sbi.co.in designates 115.240.236.42 as permitted sender) smtp.mailfrom=notifications@communications.sbi.co.in;
+    dkim=pass header.i=@communications.sbi.co.in header.s=sbi2026;
+    dmarc=pass (p=REJECT sp=REJECT) header.from=communications.sbi.co.in
+From: "State Bank of India" <notifications@communications.sbi.co.in>
+To: <employee@target-enterprise.in>
+Subject: SBI Customer Advisory: Branch Operations Notice
+Date: Sun, 27 Sep 2026 09:15:00 +0530
+Message-ID: <sbi-notice-20260927-99120@communications.sbi.co.in>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 
-We noticed a new login to your Spotify account from Chrome on Windows.
+Dear Customer,
 
-Location: Mumbai, India
-IP Address: 103.22.14.8
-Time: September 27, 2026 10:42 UTC
+This is an informational broadcast from the State Bank of India. Select administrative branches will remain operational on Sunday, 27 September 2026 for statutory quarterly settlement. Regular banking services remain available via YONO and INB portals.
 
-If this was you, no action is needed. If you did not perform this login, please secure your account immediately at https://accounts.spotify.com/account/overview.
-
-Thank you,
-The Spotify Security Team`,
-    summary: "Authentic automated device login notification from verified Spotify infrastructure.",
-    badges: "SPF: PASS | DKIM: PASS (spotify.com) | DMARC: PASS",
-    authStatus: {
-      spf: { status: "VERIFIED", detail: "Pass - Sender IP 198.22.240.12 verified in SPF record for spotify.com" },
-      dkim: { status: "VERIFIED", detail: "Pass - Cryptographic RSA signature verified (@spotify.com)" },
-      dmarc: { status: "VERIFIED", detail: "Pass - Strict DMARC domain alignment verified" },
-      domain: { status: "SAFE", detail: "Official verified Spotify domain" },
-      url: { status: "SAFE", detail: "All embedded links point strictly to official *.spotify.com endpoints" },
-      socialEng: { status: "SAFE", detail: "Standard automated security login notification; zero credential trap" }
-    },
-    relayHops: [
-      { step: 1, label: "Spotify Edge Mailer", node: "Spotify Authorized Relay", ip: "198.22.240.12", country: "Sweden (SE)", asn: "AS8403 Spotify AB", timestamp: "10:42:08 UTC", latency: "0ms", status: "SAFE", detail: "Verified Spotify outbound mail infrastructure." },
-      { step: 2, label: "Target Customer Gateway", node: "Target MX Ingress", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "10:42:11 UTC", latency: "+3ms", status: "SAFE", detail: "Authenticated edge mail gateway ingress." }
-    ],
-    originGeo: {
-      sendingNode: "Stockholm, Sweden (Spotify Infrastructure)",
-      probableOrigin: "Spotify Production Mail Cluster",
-      route: ["Spotify Relay (198.22.240.12)", "Target MX"],
-      confidence: 99,
-      disclaimer: "Geolocation represents observed network infrastructure from authenticated headers."
-    }
-  },
-
-  {
-    id: "sbi-advisory-02",
-    fileName: "sbi_customer_advisory.eml",
-    title: "SBI Advisory - Branch Timings & Holiday Notice",
-    riskScore: 5,
-    classification: "CLEAN INFORMATIONAL",
-    confidence: "99%",
-    sender: "State Bank of India <circulars@sbi.co.in>",
-    replyTo: "circulars@sbi.co.in",
-    returnPath: "notice-bounce@sbi.co.in",
-    messageId: "<20260927.081500.3341@sbi.co.in>",
-    date: "2026-09-27 08:15:00 UTC",
-    subject: "Official Advisory: Revised Branch Banking Hours for Upcoming National Holidays",
-    rawHeaders: `Received: from mail-out.sbi.co.in (121.240.54.18) by mx.target-corp.com with ESMTPS; Sun, 27 Sep 2026 08:15:00 +0000
-From: State Bank of India <circulars@sbi.co.in>
-To: Valued Customer <customer@target-corp.com>
-Reply-To: circulars@sbi.co.in
-Return-Path: notice-bounce@sbi.co.in
-Subject: Official Advisory: Revised Branch Banking Hours for Upcoming National Holidays
-Date: Sun, 27 Sep 2026 08:15:00 +0000
-Message-ID: <20260927.081500.3341@sbi.co.in>
-Authentication-Results: mx.target-corp.com; spf=pass (sender 121.240.54.18 verified); dkim=pass (header.i=@sbi.co.in); dmarc=pass (p=reject)
-Received-SPF: pass (sbi.co.in: domain of notice-bounce@sbi.co.in designates 121.240.54.18 as permitted sender)
-DKIM-Signature: v=1; a=rsa-sha256; d=sbi.co.in; s=k1; c=relaxed/relaxed;`,
+Warm regards,
+State Bank of India`,
+    rawHeaders: `Received: from mail-out-02.sbi.co.in (mail-out-02.sbi.co.in [115.240.236.42]) by mx.target-enterprise.in; Sun, 27 Sep 2026 09:15:20 +0530
+From: "State Bank of India" <notifications@communications.sbi.co.in>
+To: <employee@target-enterprise.in>
+Subject: SBI Customer Advisory: Branch Operations Notice
+Date: Sun, 27 Sep 2026 09:15:00 +0530
+Message-ID: <sbi-notice-20260927-99120@communications.sbi.co.in>
+Authentication-Results: mx.target-enterprise.in; spf=pass; dkim=pass; dmarc=pass`,
     body: `Dear Customer,
 
-Please be informed about the revised branch operating hours during the upcoming national holiday schedule.
+This is an informational broadcast from the State Bank of India. Select administrative branches will remain operational on Sunday, 27 September 2026 for statutory quarterly settlement. Regular banking services remain available via YONO and INB portals.
 
-1. All branches will remain closed on October 2nd.
-2. Digital banking services (YONO, INB, ATMs) will remain operational 24/7.
-
-SECURITY ADVISORY: State Bank of India NEVER asks for PIN, OTP, CVV, or passwords over email or SMS. Please visit https://sbi.co.in for official updates.
-
-Issued in public interest by State Bank of India.`,
+Warm regards,
+State Bank of India`,
     summary: "Signed public banking notice; no credential harvesting, links, or actionable threats detected.",
-    badges: "SPF: PASS | DKIM: PASS (sbi.co.in) | DMARC: PASS",
+    badges: "SPF: PASS | DKIM: PASS | DMARC: PASS",
     authStatus: {
-      spf: { status: "VERIFIED", detail: "Pass - Sender IP 121.240.54.18 authorized for sbi.co.in" },
-      dkim: { status: "VERIFIED", detail: "Pass - RSA signature verified (@sbi.co.in)" },
+      spf: { status: "VERIFIED", detail: "Pass - Sender IP 115.240.236.42 authorized for sbi.co.in" },
+      dkim: { status: "VERIFIED", detail: "Pass - RSA signature verified (@communications.sbi.co.in)" },
       dmarc: { status: "VERIFIED", detail: "Pass - DMARC policy alignment verified" },
       domain: { status: "SAFE", detail: "Legitimate State Bank of India domain (sbi.co.in)" },
-      url: { status: "SAFE", detail: "Informational text link pointing to official sbi.co.in website" },
+      url: { status: "SAFE", detail: "Informational text link pointing to official sbi.co.in portal" },
       socialEng: { status: "SAFE", detail: "Public awareness broadcast notice; zero call-to-action or credential prompts" }
     },
     relayHops: [
-      { step: 1, label: "SBI Internal Mailer", node: "SBI Outbound Cluster", ip: "121.240.54.18", country: "India (IN)", asn: "AS4755 TATA Communications", timestamp: "08:14:55 UTC", latency: "0ms", status: "SAFE", detail: "Verified SBI corporate mail relay node." },
-      { step: 2, label: "Target MX Ingress", node: "Customer MX Gateway", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "08:15:00 UTC", latency: "+5ms", status: "SAFE", detail: "Delivered to target inbox." }
+      { step: 1, label: "SBI Internal Mailer", node: "SBI Outbound Cluster", ip: "115.240.236.42", country: "India (IN)", asn: "AS4755 TATA Communications", timestamp: "09:15:00 UTC", latency: "0ms", status: "SAFE", detail: "Verified SBI corporate mail relay node." },
+      { step: 2, label: "Target MX Ingress", node: "Customer MX Gateway", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "09:15:20 UTC", latency: "+5ms", status: "SAFE", detail: "Delivered to target inbox." }
     ],
     originGeo: {
       sendingNode: "Mumbai, Maharashtra, India",
       probableOrigin: "SBI IT Centre Belapur Infrastructure",
-      route: ["SBI Mailer (121.240.54.18)", "Target MX"],
+      route: ["SBI Mailer (115.240.236.42)", "Target MX"],
       confidence: 99,
       disclaimer: "Geolocation represents observed network infrastructure from authenticated headers."
     }
   },
 
-  {
-    id: "sbi-kyc-phish-03",
-    fileName: "sbi_urgent_kyc_update.eml",
-    title: "Malicious Phishing - Deceptive SBI Account Suspension",
+  bec_urgent: {
+    id: "bec_urgent",
+    fileName: "ceo_urgent_wire_transfer.eml",
+    title: "CEO Wire Transfer (BEC)",
     riskScore: 94,
     classification: "CRITICAL THREAT",
     confidence: "96%",
-    sender: "State Bank of India <notice@sbi.co.in>",
-    replyTo: "kyc-verification@attacker-phish.net",
-    returnPath: "bounce@attacker-phish.net",
-    messageId: "<20260927.110000.9912@attacker-phish.net>",
-    date: "2026-09-27 11:00:00 UTC",
-    subject: "URGENT: Your SBI Account Will Be Blocked Within 24 Hours - KYC Update",
-    rawHeaders: `Received: from phish-relay.fake-host.io (185.220.101.5) by mx.target-corp.com; Sun, 27 Sep 2026 11:00:00 +0000
-From: State Bank of India <notice@sbi.co.in>
-To: Customer <victim@target-corp.com>
-Reply-To: kyc-verification@attacker-phish.net
-Return-Path: bounce@attacker-phish.net
-Subject: URGENT: Your SBI Account Will Be Blocked Within 24 Hours - KYC Update
-Date: Sun, 27 Sep 2026 11:00:00 +0000
-Message-ID: <20260927.110000.9912@attacker-phish.net>
-Authentication-Results: mx.target-corp.com; spf=fail (sender 185.220.101.5 not authorized); dkim=fail (signature missing); dmarc=fail (p=reject)
-Received-SPF: fail (sbi.co.in: IP 185.220.101.5 is not permitted)`,
-    body: `Dear SBI Customer,
-
-Your State Bank of India account has been flagged for missing Mandatory KYC (Know Your Customer) compliance.
-
-Failure to complete KYC verification within 24 hours will result in permanent debit freezing of your account and net banking access.
-
-Please click the secure link below to update your PAN and Aadhaar details immediately:
-http://185.220.101.5/sbi-verify-kyc
-
-State Bank of India Online Security Division`,
-    summary: "Deceptive banking phishing attempt with spoofed SBI headers and external credential harvesting link.",
-    badges: "SPF: FAIL | DKIM: NONE | DMARC: FAIL",
-    authStatus: {
-      spf: { status: "FAILED", detail: "SPF Fail - Unauthorized IP 185.220.101.5 spoofing sbi.co.in" },
-      dkim: { status: "FAILED", detail: "Missing cryptographic DKIM RSA signature header" },
-      dmarc: { status: "FAILED", detail: "DMARC Alignment Fail - From domain sbi.co.in mismatched with Return-Path" },
-      domain: { status: "SPOOFED", detail: "Header spoofing of trusted domain sbi.co.in from rogue sender" },
-      url: { status: "SUSPICIOUS", detail: "Deceptive link mismatch: text displays sbi.co.in but points to malicious IP 185.220.101.5" },
-      socialEng: { status: "HIGH", detail: "High-urgency fear tactic, threat of account suspension, credential harvesting link" }
-    },
-    relayHops: [
-      { step: 1, label: "Rogue VPS Relay", node: "Malicious Bulletproof Host", ip: "185.220.101.5", country: "Netherlands (NL)", asn: "AS60729 TorExit/Proxy", timestamp: "10:59:55 UTC", latency: "0ms", status: "HIGH-RISK", detail: "Known malicious IP host broadcasting spoofed headers." },
-      { step: 2, label: "Target MX Ingress", node: "Customer MX Gateway", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "11:00:00 UTC", latency: "+5ms", status: "SAFE", detail: "Intercepted by Tracex Automated Agent." }
-    ],
-    originGeo: {
-      sendingNode: "Amsterdam, Netherlands (Attacker Relay VPS)",
-      probableOrigin: "Bulletproof Proxy Hosting Subnet",
-      route: ["Attacker IP (185.220.101.5)", "Target MX"],
-      confidence: 88,
-      disclaimer: "Geolocation represents observed network infrastructure from unauthenticated headers."
-    }
-  },
-
-  {
-    id: "ceo-wire-bec-04",
-    fileName: "ceo_wire_transfer_bec.eml",
-    title: "BEC Financial Fraud - Executive Wire Transfer Authorization",
-    riskScore: 91,
-    classification: "CRITICAL THREAT",
-    confidence: "93%",
-    sender: "Chief Executive Officer <ceo@paypa1-secure.com>",
-    replyTo: "finance-override@another-domain.com",
+    sender: "Dr. Vikram Sarabhai - Director <ceo-alert@exec-direct-portal.com>",
+    replyTo: "executive-wire-transfers@secure-escrow-routing.com",
     returnPath: "bounce-handler@103-attacker-relay.net",
-    messageId: "<20260927.094103.8892@paypa1-secure.com>",
-    date: "2026-09-27 09:41:03 UTC",
-    subject: "URGENT: Confidential Acquisition Wire Transfer Authorization ($450,000)",
-    rawHeaders: `Received: from mail-relay.fake-isp.com (103.142.18.99) by mx.target-corp.com with ESMTPS; Sun, 27 Sep 2026 09:41:03 +0000
-Received: from amsterdam-node.shadow-net.io (185.220.101.5) by mail-relay.fake-isp.com; Sun, 27 Sep 2026 09:40:58 +0000
-From: Chief Executive Officer <ceo@paypa1-secure.com>
-To: CFO <cfo@target-corp.com>
-Reply-To: finance-override@another-domain.com
-Subject: URGENT: Confidential Acquisition Wire Transfer Authorization ($450,000)
-Date: Sun, 27 Sep 2026 09:41:03 +0000
-Message-ID: <20260927.094103.8892@paypa1-secure.com>
-Authentication-Results: mx.target-corp.com; spf=softfail (sender 103.142.18.99 not in spf record); dkim=fail (signature invalid); dmarc=fail (p=reject)
-X-Originating-IP: 103.142.18.99`,
-    body: `Team,
+    messageId: "<tx-case-9076-sec-req-884920@exec-direct-portal.com>",
+    date: "2026-09-27 15:41:40 UTC",
+    subject: "URGENT: Confidential Acquisition Wire Settlement",
+    badge: "CRITICAL • 94/100",
+    badgeClass: "text-[#EF4444] border-[#EF4444]/30 bg-[#EF4444]/10",
+    description: "Tests 4-hop relay extraction, Tor exit node detection (185.220.101.5), and urgency cues.",
+    rawContent: `Received: from mx.target-enterprise.in (mx.target-enterprise.in [198.51.100.42])
+    by internal-inbox-gateway (Postfix) with ESMTPS id 7Kq11B
+    for <cfo@target-enterprise.in>; Sun, 27 Sep 2026 15:42:10 +0000
+Received: from mail-relay-04.threat-net.org (mail-relay-04.threat-net.org [185.220.101.5])
+    by mx.target-enterprise.in with ESMTPS id 4Zb9Kq2M15z8Q; Sun, 27 Sep 2026 15:42:08 +0000
+Received: from anonymizer.proxy-node.ru (HELO vps-node-01.tor-exit.net) (185.220.101.5)
+    by mail-relay-04.threat-net.org with ESMTP; Sun, 27 Sep 2026 15:42:01 +0000
+Received: from internal-lan-client.local (10.0.4.12)
+    by vps-node-01.tor-exit.net with SMTP; Sun, 27 Sep 2026 15:41:50 +0000
+Authentication-Results: mx.target-enterprise.in;
+    spf=softfail smtp.mailfrom=ceo-alert@exec-direct-portal.com;
+    dkim=none;
+    dmarc=fail (p=REJECT) header.from=target-enterprise.in
+From: "Dr. Vikram Sarabhai - Director" <ceo-alert@exec-direct-portal.com>
+Reply-To: executive-wire-transfers@secure-escrow-routing.com
+To: <cfo@target-enterprise.in>
+Subject: URGENT: Confidential Acquisition Wire Settlement
+Date: Sun, 27 Sep 2026 15:41:40 +0000
+Message-ID: <tx-case-9076-sec-req-884920@exec-direct-portal.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 
-I am currently in an offsite executive board meeting regarding an active M&A acquisition transaction. 
-We need to immediately release an initial earnest deposit of $450,000.00 USD to escrow agent accounts today to finalize the contract before 12:00 PM EST.
+Team, please execute an immediate confidential wire transfer of $84,500 USD for the acquisition closure agreements finalized this morning. Complete the release using the settlement coordinates below and reply with the transfer confirmation slip.
 
-Please review the wire transfer coordinates immediately:
-Beneficiary Bank: Offshore Apex Commercial Bank
-Routing No: 021000021 / Account: 8849-201-9924-X
+Beneficiary Name: Secure Escrow Holding LLC
+Routing Code: #TX-9076-CONFIDENTIAL`,
+    rawHeaders: `Received: from mail-relay-04.threat-net.org (185.220.101.5) by mx.target-enterprise.in; Sun, 27 Sep 2026 15:42:08 +0000
+From: "Dr. Vikram Sarabhai - Director" <ceo-alert@exec-direct-portal.com>
+Reply-To: executive-wire-transfers@secure-escrow-routing.com
+To: <cfo@target-enterprise.in>
+Subject: URGENT: Confidential Acquisition Wire Settlement
+Date: Sun, 27 Sep 2026 15:41:40 +0000
+Authentication-Results: mx.target-enterprise.in; spf=softfail; dkim=none; dmarc=fail`,
+    body: `Team, please execute an immediate confidential wire transfer of $84,500 USD for the acquisition closure agreements finalized this morning. Complete the release using the settlement coordinates below and reply with the transfer confirmation slip.
 
-Do not discuss this via phone as the deal remains strictly under NDA. Confirm via reply once initiated.
-
-Best regards,
-Chief Executive Officer`,
+Beneficiary Name: Secure Escrow Holding LLC
+Routing Code: #TX-9076-CONFIDENTIAL`,
     summary: "Executive impersonation wire transfer scam requesting urgent financial disbursement.",
-    badges: "SPF: SOFTFAIL | Display-Name Spoof | Anonymized Relay",
+    badges: "SPF: SOFTFAIL | Tor Exit Node | Anonymized Relay",
     authStatus: {
-      spf: { status: "FAILED", detail: "Softfail - IP 103.142.18.99 not authorized in SPF record for paypa1-secure.com" },
+      spf: { status: "FAILED", detail: "Softfail - IP 185.220.101.5 not authorized in SPF record" },
       dkim: { status: "FAILED", detail: "RSA signature header missing or invalid body hash" },
-      dmarc: { status: "FAILED", detail: "DMARC policy rejection - From domain paypa1-secure.com mismatch" },
-      domain: { status: "LOOKALIKE", detail: "Typosquatting domain paypa1-secure.com registered recently" },
+      dmarc: { status: "FAILED", detail: "DMARC policy rejection - From domain mismatch" },
+      domain: { status: "LOOKALIKE", detail: "Typosquatting domain exec-direct-portal.com registered recently" },
       url: { status: "SUSPICIOUS", detail: "Unverified wire transfer payment gateway request" },
       socialEng: { status: "HIGH", detail: "Urgent executive wire transfer, out-of-band communication block, secrecy demand" }
     },
     relayHops: [
-      { step: 1, label: "Origin Sending Node", node: "Mumbai Attacker Subnet", ip: "103.142.18.99", country: "India (IN)", asn: "AS133202 FastNet", timestamp: "09:40:51 UTC", latency: "0ms", status: "SUSPICIOUS", detail: "X-Originating-IP source node. Known bulletproof VPN endpoint." },
-      { step: 2, label: "Intermediate Relay", node: "Amsterdam VPN Node", ip: "185.220.101.5", country: "Netherlands (NL)", asn: "AS60729 TorExit", timestamp: "09:40:58 UTC", latency: "+7ms", status: "HIGH-RISK", detail: "Anonymizing tunnel node with active threat reputation flags." },
-      { step: 3, label: "Target MX Ingress", node: "Customer MX Gateway", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "09:41:03 UTC", latency: "+5ms", status: "SAFE", detail: "Quarantined by Tracex Automated Agent." }
+      { step: 1, label: "Origin Sending Node", node: "Internal LAN Client", ip: "10.0.4.12", country: "Internal (LAN)", asn: "Private IP", timestamp: "15:41:50 UTC", latency: "0ms", status: "SUSPICIOUS", detail: "Source node broadcasting spoofed headers." },
+      { step: 2, label: "Tor Exit Relay", node: "Amsterdam Proxy VPS", ip: "185.220.101.5", country: "Netherlands (NL)", asn: "AS60729 TorExit", timestamp: "15:42:01 UTC", latency: "+11ms", status: "HIGH-RISK", detail: "Anonymizing tunnel node with active threat reputation flags." },
+      { step: 3, label: "Threat Net Relay", node: "Threat-Net Mail Relay", ip: "185.220.101.5", country: "Netherlands (NL)", asn: "AS60729 TorExit", timestamp: "15:42:08 UTC", latency: "+7ms", status: "HIGH-RISK", detail: "Rogue mail relay forwarding spoofed payload." },
+      { step: 4, label: "Target MX Ingress", node: "Customer MX Gateway", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "15:42:10 UTC", latency: "+2ms", status: "SAFE", detail: "Quarantined by Tracex Automated Agent." }
     ],
     originGeo: {
-      sendingNode: "Mumbai, MH, India",
-      probableOrigin: "Amsterdam, Netherlands (TOR/Relay VPN)",
-      route: ["Mumbai (103.142.18.99)", "Amsterdam (185.220.101.5)", "Target MX"],
-      confidence: 73,
+      sendingNode: "Amsterdam, Netherlands (TOR/Relay VPS)",
+      probableOrigin: "Bulletproof Proxy Hosting Subnet",
+      route: ["Tor Exit (185.220.101.5)", "Target MX"],
+      confidence: 96,
+      disclaimer: "Geolocation represents observed network infrastructure from unauthenticated headers."
+    }
+  },
+
+  paypal_phish: {
+    id: "paypal_phish",
+    fileName: "paypal_account_restricted.eml",
+    title: "PayPal Credential Phish",
+    riskScore: 91,
+    classification: "CRITICAL THREAT",
+    confidence: "94%",
+    sender: "PayPal Security <service@paypal-secure-auth.com>",
+    replyTo: "support@paypal-secure-auth.com",
+    returnPath: "bounce@paypal-secure-auth.com",
+    messageId: "<20260927.120950.4412@paypal-secure-auth.com>",
+    date: "2026-09-27 12:09:50 UTC",
+    subject: "Action Required: Your PayPal account has been restricted",
+    badge: "THREAT • 91/100",
+    badgeClass: "text-[#F59E0B] border-[#F59E0B]/30 bg-[#F59E0B]/10",
+    description: "Tests link domain mismatch, spoofed Return-Path, and .pdf.exe dropper attachment.",
+    rawContent: `Received: from vps-mail-host.hk-relay.net ([103.142.18.99])
+    by mx.target-enterprise.in; Sun, 27 Sep 2026 12:10:04 +0000
+Authentication-Results: mx.target-enterprise.in;
+    spf=fail; dkim=fail; dmarc=fail
+From: "PayPal Security" <service@paypal-secure-auth.com>
+To: <accounts@target-enterprise.in>
+Subject: Action Required: Your PayPal account has been restricted
+Date: Sun, 27 Sep 2026 12:09:50 +0000
+MIME-Version: 1.0
+Content-Type: text/html; charset="UTF-8"
+
+<p>Unauthorized attempt detected. <a href="https://auth-gate.paypa1-secure.com/wire-login">https://www.paypal.com/verify</a></p>
+<p>Attached: wire_transfer_invoice_450k.pdf.exe</p>`,
+    rawHeaders: `Received: from vps-mail-host.hk-relay.net (103.142.18.99) by mx.target-enterprise.in; Sun, 27 Sep 2026 12:10:04 +0000
+From: "PayPal Security" <service@paypal-secure-auth.com>
+To: <accounts@target-enterprise.in>
+Subject: Action Required: Your PayPal account has been restricted
+Date: Sun, 27 Sep 2026 12:09:50 +0000
+Authentication-Results: mx.target-enterprise.in; spf=fail; dkim=fail; dmarc=fail`,
+    body: `<p>Unauthorized attempt detected. <a href="https://auth-gate.paypa1-secure.com/wire-login">https://www.paypal.com/verify</a></p>
+<p>Attached: wire_transfer_invoice_450k.pdf.exe</p>`,
+    summary: "Credential phishing attempt with deceptive link mismatch and obfuscated dropper payload.",
+    badges: "SPF: FAIL | DKIM: FAIL | DMARC: FAIL",
+    authStatus: {
+      spf: { status: "FAILED", detail: "SPF Fail - Unauthorized IP 103.142.18.99" },
+      dkim: { status: "FAILED", detail: "Invalid DKIM signature for paypal-secure-auth.com" },
+      dmarc: { status: "FAILED", detail: "DMARC Policy Rejection" },
+      domain: { status: "LOOKALIKE", detail: "Lookalike typosquatting domain paypal-secure-auth.com" },
+      url: { status: "SUSPICIOUS", detail: "Link text displays paypal.com but href points to auth-gate.paypa1-secure.com" },
+      socialEng: { status: "HIGH", detail: "Account suspension threat, fake security verify link" }
+    },
+    relayHops: [
+      { step: 1, label: "Rogue VPS Mailer", node: "HK Relay VPS", ip: "103.142.18.99", country: "Hong Kong (HK)", asn: "AS133202 FastNet", timestamp: "12:09:50 UTC", latency: "0ms", status: "HIGH-RISK", detail: "Bulletproof host node." },
+      { step: 2, label: "Target MX Ingress", node: "Customer MX Gateway", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "12:10:04 UTC", latency: "+14ms", status: "SAFE", detail: "Quarantined by Tracex." }
+    ],
+    originGeo: {
+      sendingNode: "Hong Kong (Attacker VPS)",
+      probableOrigin: "FastNet Subnet",
+      route: ["HK Relay (103.142.18.99)", "Target MX"],
+      confidence: 94,
       disclaimer: "Geolocation represents observed network infrastructure from unauthenticated headers."
     }
   }
-];
-
+};
 
 export const CURRENT_CASE = {
   id: "CASE-2026-0042",
@@ -297,6 +275,5 @@ export const EVIDENCE_CHAIN_LOGS = [
   { time: "2026-09-01 09:41:03 UTC", action: "Evidence Acquired", operator: "SECURE_PORTAL_INGEST", detail: "File uploaded to forensic vault via automated ingress pipeline." },
   { time: "2026-09-01 09:41:03 UTC", action: "SHA-256 & MD5 Sealed", operator: "CRYPTO_VAULT_AGENT", detail: "Hashes computed: 8f92...a31c. Write-once immutability lock engaged." },
   { time: "2026-09-01 09:41:04 UTC", action: "Header & Routing Analysis", operator: "TRACE_PARSER_V2", detail: "Headers extracted in read-only sandbox. Zero payload modifications." },
-  { time: "2026-09-01 09:41:07 UTC", action: "Threat Intel Enrichment", operator: "INTEL_FEED_SYNC", detail: "Correlated against global threat telemetry databases." },
-  { time: "2026-09-01 09:41:08 UTC", action: "Forensic Report Generated", operator: "ANALYST_T3 (UID: 8842)", detail: "Comprehensive investigation report generated and signed." }
+  { time: "2026-09-01 09:41:07 UTC", action: "Threat Intel Enrichment", operator: "INTEL_FEED_SYNC", detail: "Correlated against global threat telemetry databases." }
 ];

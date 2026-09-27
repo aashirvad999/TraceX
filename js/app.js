@@ -256,7 +256,7 @@ function parseEmlContent(rawText, fileName = "uploaded_payload.eml") {
 class TraceXApp {
   constructor() {
     this.currentCase = { ...CURRENT_CASE };
-    this.sampleEmails = [...SAMPLE_EMAILS];
+    this.sampleEmails = Array.isArray(SAMPLE_EMAILS) ? [...SAMPLE_EMAILS] : Object.values(SAMPLE_EMAILS);
     this.activeEmail = null;
     this.hasAnalyzedFile = false; // False by default on first load
     this.fileHistory = [];
@@ -557,6 +557,52 @@ class TraceXApp {
         if (drawer) drawer.classList.toggle("hidden");
         return;
       }
+
+      // SIH Evaluator Sample Files Dropdown Toggle
+      const sampleDropdownBtn = e.target.closest("#sample-dropdown-btn");
+      const sampleDropdownMenu = document.getElementById("sample-dropdown-menu");
+
+      if (sampleDropdownBtn && sampleDropdownMenu) {
+        sampleDropdownMenu.classList.toggle("hidden");
+        return;
+      }
+
+      // Direct .eml Download Handler
+      const downloadBtn = e.target.closest("[data-download-sample]");
+      if (downloadBtn) {
+        e.stopPropagation();
+        const key = downloadBtn.getAttribute("data-download-sample");
+        const sample = SAMPLE_EMAILS[key];
+        if (sample) {
+          const raw = sample.rawContent || (sample.rawHeaders + "\n\n" + sample.body);
+          triggerEmlDownload(sample.fileName || `${key}.eml`, raw);
+        }
+        return;
+      }
+
+      // Load & Analyze Sample Handler
+      const loadCard = e.target.closest("[data-load-sample]");
+      if (loadCard) {
+        const key = loadCard.getAttribute("data-load-sample");
+        const sample = SAMPLE_EMAILS[key];
+        if (sample) {
+          if (sampleDropdownMenu) sampleDropdownMenu.classList.add("hidden");
+          this.uploadedFileName = sample.fileName || `${key}.eml`;
+          this.uploadedFileText = sample.rawContent || (sample.rawHeaders + "\n\n" + sample.body);
+          window.currentRawEml = this.uploadedFileText;
+
+          const txtArea = document.getElementById("raw-email-input");
+          if (txtArea) txtArea.value = this.uploadedFileText;
+
+          this.executeAnalysisForContent(this.uploadedFileText, this.uploadedFileName);
+        }
+        return;
+      }
+
+      // Close Dropdown if Clicked Outside Container
+      if (!e.target.closest("#sample-menu-container") && sampleDropdownMenu && !sampleDropdownMenu.classList.contains("hidden")) {
+        sampleDropdownMenu.classList.add("hidden");
+      }
     });
 
     window.addEventListener("resize", () => {
@@ -578,6 +624,7 @@ class TraceXApp {
     this.hasAnalyzedFile = true;
     this.showAllIocs = false;
     this.showAllTimeline = false;
+    window.currentRawEml = rawText;
 
     this.currentCase.id = `CASE-${Date.now().toString().slice(-4)}`;
     this.currentCase.title = parsedEmail.title;
@@ -1028,7 +1075,33 @@ class TraceXApp {
         window.scrollTo({ top: scrollPos, behavior: 'instant' });
       });
     }
+
+    const btnDownloadCurrentCase = document.getElementById("download-current-case-btn");
+    if (btnDownloadCurrentCase) {
+      btnDownloadCurrentCase.addEventListener("click", () => {
+        const fileName = this.uploadedFileName || (this.activeEmail && this.activeEmail.fileName) || "active_investigation.eml";
+        const rawContent = window.currentRawEml || this.uploadedFileText || (this.activeEmail && (this.activeEmail.rawHeaders + "\n\n" + this.activeEmail.body));
+        triggerEmlDownload(fileName, rawContent);
+      });
+    }
   }
+}
+
+// Native client-side file downloader using Blob API
+export function triggerEmlDownload(fileName = "evidence.eml", rawText = "") {
+  if (!rawText || rawText.trim() === "") {
+    console.warn("No raw .eml content provided for download.");
+    return;
+  }
+  const blob = new Blob([rawText], { type: 'message/rfc822;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName.endsWith('.eml') ? fileName : `${fileName}.eml`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 document.addEventListener("DOMContentLoaded", () => {

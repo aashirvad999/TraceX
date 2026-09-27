@@ -1,4 +1,5 @@
 // TraceX - Single-Page Header Navigation Component
+import { SAMPLE_EMAILS } from '../sampleData.js';
 
 export function renderHeader() {
   return `
@@ -29,6 +30,45 @@ export function renderHeader() {
         <!-- Smooth Sliding Active Underline Indicator Bar -->
         <div id="nav-indicator" class="absolute bottom-0 left-0 h-0.5 bg-[#D6A84F] rounded-full transition-all duration-300 ease-out pointer-events-none opacity-0 shadow-[0_0_8px_rgba(214,168,79,0.6)]"></div>
       </nav>
+
+      <!-- Right Action Container (SIH Evaluator Sample Files Dropdown) -->
+      <div class="hidden md:flex items-center shrink-0">
+        <div class="relative inline-block text-left" id="sample-menu-container">
+          <button id="sample-dropdown-btn" type="button" class="border border-[#24282D] hover:border-[#D6A84F]/50 bg-[#15181C] text-xs px-3.5 py-2 rounded-xl text-[#9CA3AF] hover:text-white flex items-center gap-1.5 transition-all cursor-pointer shadow-sm">
+            <span class="material-symbols-outlined text-sm text-[#D6A84F]">folder_open</span>
+            <span class="font-bold text-white">Sample Files</span>
+            <span class="material-symbols-outlined text-xs">arrow_drop_down</span>
+          </button>
+          
+          <!-- Floating Dropdown -->
+          <div id="sample-dropdown-menu" class="hidden absolute right-0 mt-2 w-80 sm:w-88 bg-[#101214] border border-[#24282D] shadow-2xl rounded-xl p-2.5 z-50 backdrop-blur-md">
+            <div class="px-2 py-1.5 border-b border-[#24282D] mb-1.5 flex justify-between items-center">
+              <span class="text-[11px] font-mono uppercase tracking-wider text-[#D6A84F] font-bold">SIH Evaluator Test Files</span>
+              <span class="text-[10px] text-[#9CA3AF] font-mono">Click to run • Icon to save</span>
+            </div>
+            <div id="sample-items-container" class="space-y-1.5">
+              ${Object.keys(SAMPLE_EMAILS).map(key => {
+                const item = SAMPLE_EMAILS[key];
+                return `
+                  <div class="group flex items-center justify-between p-2.5 rounded-lg bg-[#08090B] hover:bg-[#15181C] border border-transparent hover:border-[#D6A84F]/30 transition-all cursor-pointer" data-load-sample="${key}">
+                    <div class="flex-1 pr-2">
+                      <div class="flex items-center gap-2 mb-1">
+                        <span class="text-xs font-bold text-white group-hover:text-[#D6A84F] transition-colors">${item.title}</span>
+                        <span class="text-[9px] font-mono px-1.5 py-0.5 rounded border ${item.badgeClass}">${item.badge}</span>
+                      </div>
+                      <p class="text-[11px] text-[#9CA3AF] line-clamp-1 leading-tight">${item.description}</p>
+                    </div>
+                    <!-- Explicit Download Button -->
+                    <button type="button" class="p-1.5 rounded hover:bg-[#24282D] text-[#9CA3AF] hover:text-[#D6A84F] transition-colors shrink-0" title="Download .eml file" data-download-sample="${key}">
+                      <span class="material-symbols-outlined text-base">download</span>
+                    </button>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Mobile Hamburger Menu Button -->
       <button id="btn-mobile-menu-toggle" class="md:hidden p-2 text-[#9CA3AF] hover:text-white transition-colors">

@@ -80,15 +80,22 @@ export function renderThreatResult({ activeEmail, hasAnalyzedFile = true }) {
           <h2 class="text-2xl lg:text-3xl font-bold text-white tracking-tight">${title}</h2>
         </div>
 
-        <div class="flex items-center gap-4 bg-[#15181C] border border-[#24282D] px-5 py-3 rounded-xl">
-          <div class="text-right">
-            <span class="text-[10px] font-mono uppercase text-[#9CA3AF] block">CONFIDENCE</span>
-            <span class="text-sm font-bold text-white font-mono">${confidence}</span>
-          </div>
-          <div class="h-8 w-px bg-[#24282D]"></div>
-          <div class="text-right">
-            <span class="text-[10px] font-mono uppercase text-[#9CA3AF] block">RISK SCORE</span>
-            <span class="text-xl font-bold font-mono ${scoreColorClass}">${riskScore}/100</span>
+        <div class="flex flex-wrap items-center gap-3">
+          <button id="download-current-case-btn" type="button" class="text-xs font-mono px-3 py-2 rounded-xl border border-[#24282D] hover:border-[#D6A84F] bg-[#15181C] text-[#9CA3AF] hover:text-white flex items-center gap-1.5 transition-all cursor-pointer shadow-sm">
+            <span class="material-symbols-outlined text-sm text-[#D6A84F]">download</span>
+            <span>Export Raw .eml</span>
+          </button>
+
+          <div class="flex items-center gap-4 bg-[#15181C] border border-[#24282D] px-5 py-3 rounded-xl">
+            <div class="text-right">
+              <span class="text-[10px] font-mono uppercase text-[#9CA3AF] block">CONFIDENCE</span>
+              <span class="text-sm font-bold text-white font-mono">${confidence}</span>
+            </div>
+            <div class="h-8 w-px bg-[#24282D]"></div>
+            <div class="text-right">
+              <span class="text-[10px] font-mono uppercase text-[#9CA3AF] block">RISK SCORE</span>
+              <span class="text-xl font-bold font-mono ${scoreColorClass}">${riskScore}/100</span>
+            </div>
           </div>
         </div>
       </div>
