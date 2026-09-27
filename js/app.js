@@ -1,7 +1,7 @@
 // TraceX Main Application Controller & Single-Page Scroll Router
 
 import { SAMPLE_EMAILS, CURRENT_CASE, SAMPLE_IOCS, INVESTIGATION_GRAPH_DATA, TIMELINE_EVENTS } from './sampleData.js?v=114';
-import { renderHeader } from './components/header.js?v=114';
+import { renderHeader, initLogoDecryptAnimation } from './components/header.js?v=114';
 import { renderMobileNav } from './components/mobileNav.js?v=114';
 import { renderHero } from './components/hero.js?v=114';
 import { renderWorkflow } from './components/workflow.js?v=114';
@@ -289,6 +289,7 @@ class TraceXApp {
     }
 
     this.renderShell();
+    initLogoDecryptAnimation();
     this.renderMainContent();
     this.attachGlobalEvents();
     this.setupHeaderScroll();

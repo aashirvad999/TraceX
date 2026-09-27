@@ -5,14 +5,15 @@ export function renderHeader() {
   return `
     <div class="w-full max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between gap-6 h-full">
       
-      <!-- Brand Logo (Left) -->
+      <!-- Brand Logo (Left) with Cyber Decrypt Logo & Terminal Cursor -->
       <a href="#platform" data-nav="platform" id="nav-brand" class="flex items-center gap-3 group shrink-0">
         <div class="w-9 h-9 rounded-xl bg-[#D6A84F]/10 border border-[#D6A84F]/30 flex items-center justify-center text-[#D6A84F] group-hover:bg-[#D6A84F]/20 group-hover:border-[#D6A84F]/60 transition-all shadow-[0_0_12px_rgba(214,168,79,0.15)] relative">
-          <span class="material-symbols-outlined text-xl text-[#D6A84F] animate-pulse">security</span>
+          <span class="material-symbols-outlined text-xl text-[#D6A84F] group-hover:scale-105 transition-transform duration-300 animate-pulse">security</span>
         </div>
-        <span class="text-xl font-extrabold tracking-tight text-[#D6A84F]">
-          Tracex
-        </span>
+        <div class="flex items-center font-mono font-bold text-xl tracking-tight select-none">
+          <span id="brand-decrypt-text" class="text-[#D6A84F]">Tracex</span>
+          <span id="brand-terminal-cursor" class="text-[#D6A84F] font-bold animate-blink">_</span>
+        </div>
       </a>
 
       <!-- Desktop Navigation Links -->
@@ -77,4 +78,43 @@ export function renderHeader() {
 
     </div>
   `;
+}
+
+// Decryption Scramble Engine for Logo Title
+export function initLogoDecryptAnimation() {
+  const targetText = "Tracex";
+  const element = document.getElementById("brand-decrypt-text");
+  const cursor = document.getElementById("brand-terminal-cursor");
+  if (!element) return;
+
+  const cipherChars = "01#x%_&$!*<>~@1389";
+  let iteration = 0;
+  const totalIterations = targetText.length * 3.5;
+
+  // Keep cursor visible but paused while decrypting
+  if (cursor) cursor.classList.remove("animate-blink");
+
+  const decryptInterval = setInterval(() => {
+    element.innerText = targetText
+      .split("")
+      .map((targetChar, index) => {
+        // If this character position has finished resolving, lock in the real character
+        if (index < iteration / 3.5) {
+          return targetChar;
+        }
+        // Otherwise, return a random glitch / cipher glyph
+        return cipherChars[Math.floor(Math.random() * cipherChars.length)];
+      })
+      .join("");
+
+    if (iteration >= totalIterations) {
+      clearInterval(decryptInterval);
+      element.innerText = targetText; // Ensure pristine final casing "Tracex"
+      
+      // Start terminal underscore blinking once decrypt finishes
+      if (cursor) cursor.classList.add("animate-blink");
+    }
+
+    iteration += 1;
+  }, 45);
 }
