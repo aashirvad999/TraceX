@@ -5,7 +5,7 @@ export function renderWorkflow() {
     <!-- How It Works Section -->
     <section id="how-it-works" class="py-16 max-w-7xl mx-auto px-6 lg:px-12 scroll-mt-24">
       <div class="text-center max-w-2xl mx-auto mb-14 space-y-3">
-        <h2 class="text-3xl font-bold text-white tracking-tight">How <span class="text-[#D6A84F]">Tracex</span> Works?</h2>
+        <h2 class="text-3xl font-bold text-white tracking-tight">How <span class="text-[#D6A84F]">TraceX</span> Works?</h2>
         <p class="text-base text-[#9CA3AF]">
           An end-to-end automated pipeline transforming raw email artifacts into verifiable forensic intelligence.
         </p>

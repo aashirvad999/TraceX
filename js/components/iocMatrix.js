@@ -88,7 +88,7 @@ export function renderIocMatrix(iocs = [], hasAnalyzedFile = true, isExpanded = 
           </div>
 
           <div class="pt-4 border-t border-[#24282D] text-center">
-            <span class="text-[11px] font-mono text-[#9CA3AF]"><span class="text-[#D6A84F]">Tracex</span> Intelligence Network</span>
+            <span class="text-[11px] font-mono text-[#9CA3AF]"><span class="text-[#D6A84F]">TraceX</span> Intelligence Network</span>
           </div>
         </div>
       </div>

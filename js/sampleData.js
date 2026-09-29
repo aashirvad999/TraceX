@@ -141,7 +141,7 @@ Routing Code: #TX-9076-CONFIDENTIAL`,
       { step: 1, label: "Origin Sending Node", node: "Internal LAN Client", ip: "10.0.4.12", country: "Internal (LAN)", asn: "Private IP", timestamp: "15:41:50 UTC", latency: "0ms", status: "SUSPICIOUS", detail: "Source node broadcasting spoofed headers." },
       { step: 2, label: "Tor Exit Relay", node: "Amsterdam Proxy VPS", ip: "185.220.101.5", country: "Netherlands (NL)", asn: "AS60729 TorExit", timestamp: "15:42:01 UTC", latency: "+11ms", status: "HIGH-RISK", detail: "Anonymizing tunnel node with active threat reputation flags." },
       { step: 3, label: "Threat Net Relay", node: "Threat-Net Mail Relay", ip: "185.220.101.5", country: "Netherlands (NL)", asn: "AS60729 TorExit", timestamp: "15:42:08 UTC", latency: "+7ms", status: "HIGH-RISK", detail: "Rogue mail relay forwarding spoofed payload." },
-      { step: 4, label: "Target MX Ingress", node: "Customer MX Gateway", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "15:42:10 UTC", latency: "+2ms", status: "SAFE", detail: "Quarantined by Tracex Automated Agent." }
+      { step: 4, label: "Target MX Ingress", node: "Customer MX Gateway", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "15:42:10 UTC", latency: "+2ms", status: "SAFE", detail: "Quarantined by TraceX Automated Agent." }
     ],
     originGeo: {
       sendingNode: "Amsterdam, Netherlands (TOR/Relay VPS)",
@@ -201,7 +201,7 @@ Authentication-Results: mx.target-enterprise.in; spf=fail; dkim=fail; dmarc=fail
     },
     relayHops: [
       { step: 1, label: "Rogue VPS Mailer", node: "HK Relay VPS", ip: "103.142.18.99", country: "Hong Kong (HK)", asn: "AS133202 FastNet", timestamp: "12:09:50 UTC", latency: "0ms", status: "HIGH-RISK", detail: "Bulletproof host node." },
-      { step: 2, label: "Target MX Ingress", node: "Customer MX Gateway", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "12:10:04 UTC", latency: "+14ms", status: "SAFE", detail: "Quarantined by Tracex." }
+      { step: 2, label: "Target MX Ingress", node: "Customer MX Gateway", ip: "198.51.100.42", country: "United States (US)", asn: "AS15169 Google LLC", timestamp: "12:10:04 UTC", latency: "+14ms", status: "SAFE", detail: "Quarantined by TraceX." }
     ],
     originGeo: {
       sendingNode: "Hong Kong (Attacker VPS)",
@@ -268,7 +268,7 @@ export const TIMELINE_EVENTS = [
   { timestamp: "09:41:05.045", title: "Lookalike Domain Typosquatting Flagged", severity: "HIGH", description: "Detected character substitution '1' for 'l' in paypa1-secure.com (Risk: 94/100).", source: "Domain Diagnostics", ip: "paypa1-secure.com" },
   { timestamp: "09:41:06.110", title: "Infrastructure Relay Path Traced", severity: "MED", description: "Routed across 3 hops: Mumbai (103.142.18.99) -> Amsterdam VPN (185.220.101.5).", source: "Header Parser", ip: "185.220.101.5" },
   { timestamp: "09:41:07.450", title: "Campaign Cluster Correlated", severity: "MED", description: "Matched 7 historical cases under Campaign #APEX-PHISH-2026 (Confidence: 93%).", source: "Threat Intel Sync", ip: "185.220.101.5" },
-  { timestamp: "09:41:08.000", title: "Forensic Case Dossier Rendered", severity: "SAFE", description: "Automated Case CASE-2026-0042 compiled. Risk score 94/100.", source: "Tracex SOC Core", ip: "127.0.0.1" }
+  { timestamp: "09:41:08.000", title: "Forensic Case Dossier Rendered", severity: "SAFE", description: "Automated Case CASE-2026-0042 compiled. Risk score 94/100.", source: "TraceX SOC Core", ip: "127.0.0.1" }
 ];
 
 export const EVIDENCE_CHAIN_LOGS = [

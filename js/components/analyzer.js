@@ -95,8 +95,8 @@ export function renderAnalyzer(sampleEmails = [], fileHistory = [], activeEmailI
         <!-- Preset Scenario Selectors (4 Quick-Test Presets) -->
         <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <label class="text-xs font-mono text-[#9CA3AF] uppercase block">Or Load a Quick-Test Threat Preset Scenario</label>
-            <span class="text-xs text-[#9CA3AF]">Click to load & analyze test payload</span>
+            <label class="text-xs font-mono text-[#9CA3AF] uppercase block">Load a Quick-Test Threat Preset Scenario</label>
+            <span class="text-xs text-[#9CA3AF]"><span class="text-[#D6A84F]">Click</span> to load & analyze test payload</span>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             ${sampleEmails.map((email, idx) => {
@@ -130,9 +130,8 @@ export function renderAnalyzer(sampleEmails = [], fileHistory = [], activeEmailI
         <div class="space-y-3">
           <div class="flex items-center justify-between">
             <label for="raw-email-input" class="text-xs font-mono text-[#9CA3AF] uppercase">Raw Email Headers & Message Content</label>
-            <span class="text-xs text-[#9CA3AF]">Paste RFC822 format</span>
           </div>
-          <textarea id="raw-email-input" rows="6" class="w-full bg-[#08090B] border border-[#24282D] rounded-xl p-4 font-mono text-xs text-[#E5E7EB] focus:outline-none focus:border-[#D6A84F] transition-colors leading-relaxed selection:bg-[#D6A84F] selection:text-[#08090B]" placeholder="No file uploaded yet. Drag & drop an .eml file above, select a preset scenario, or paste raw RFC822 email headers here to begin threat analysis...">${initialTextareaValue}</textarea>
+          <textarea id="raw-email-input" rows="6" class="w-full bg-[#08090B] border border-[#24282D] rounded-xl p-4 font-mono text-xs text-[#E5E7EB] focus:outline-none focus:border-[#D6A84F] transition-colors leading-relaxed selection:bg-[#D6A84F] selection:text-[#08090B]" placeholder="No file uploaded yet. Drag & drop an .eml file above, select a preset scenario, or paste raw email headers here to begin threat analysis...">${initialTextareaValue}</textarea>
         </div>
 
       </div>

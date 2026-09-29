@@ -56,9 +56,9 @@ export function renderInvestigationGraph(graphData = { nodes: [], links: [] }, h
                 const nsize = node.size || 16;
                 return `
                   <g class="graph-node-group cursor-pointer group" data-node-id="${node.id}">
-                    <circle cx="${nx}" cy="${ny}" r="${nsize}" fill="${fillColor}" fill-opacity="0.2" stroke="${fillColor}" stroke-width="2" class="transition-all duration-300 group-hover:scale-125" />
+                    <circle cx="${nx}" cy="${ny}" r="${nsize}" fill="${fillColor}" fill-opacity="0.2" stroke="${fillColor}" stroke-width="2" class="transition-all duration-300 group-hover:stroke-width-[3.5px] group-hover:stroke-[#D6A84F] group-hover:stroke-opacity-100 group-hover:fill-opacity-40" style="transform-origin: ${nx}px ${ny}px; transform-box: fill-box;" />
                     <circle cx="${nx}" cy="${ny}" r="4" fill="${fillColor}" />
-                    <text x="${nx}" y="${ny + nsize + 13}" text-anchor="middle" fill="#E5E7EB" font-size="9" font-family="JetBrains Mono" font-weight="600" class="select-none pointer-events-none">${node.label}</text>
+                    <text x="${nx}" y="${ny + nsize + 13}" text-anchor="middle" fill="#E5E7EB" font-size="9" font-family="JetBrains Mono" font-weight="600" class="select-none pointer-events-none group-hover:fill-[#D6A84F] transition-colors">${node.label}</text>
                   </g>
                 `;
               }).join('')}
@@ -66,7 +66,7 @@ export function renderInvestigationGraph(graphData = { nodes: [], links: [] }, h
 
             <!-- Graph Canvas Watermark -->
             <div class="absolute bottom-2 right-3 text-[10px] font-mono text-[#9CA3AF] pointer-events-none bg-[#08090B]/80 px-2 py-0.5 rounded border border-[#24282D]">
-              Tap/Click Nodes to Inspect
+              <span class="text-[#D6A84F]">Tap/Click</span> Nodes to Inspect
             </div>
 
           </div>
@@ -104,10 +104,6 @@ export function renderInvestigationGraph(graphData = { nodes: [], links: [] }, h
                 </div>
               </div>
             </div>
-          </div>
-
-          <div class="pt-4 border-t border-[#24282D] text-[11px] font-mono text-[#9CA3AF]">
-            Click any graph node to inspect cross-campaign correlation details.
           </div>
 
         </div>

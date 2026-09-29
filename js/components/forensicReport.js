@@ -50,7 +50,7 @@ export function renderForensicReport(currentCase = {}, activeEmail = {}, hasAnal
               TX
             </div>
             <div>
-              <h4 class="text-base sm:text-lg font-bold text-white tracking-tight"><span class="text-[#D6A84F]">Tracex</span> Forensic Intelligence System</h4>
+              <h4 class="text-base sm:text-lg font-bold text-white tracking-tight"><span class="text-[#D6A84F]">TraceX</span> Forensic Intelligence System</h4>
               <span class="text-[11px] sm:text-xs font-mono text-[#9CA3AF] block">Official Incident Investigation Dossier & Blockchain Verification</span>
             </div>
           </div>
@@ -113,7 +113,7 @@ export function renderForensicReport(currentCase = {}, activeEmail = {}, hasAnal
         <div class="bg-[#08090B] p-4 sm:p-6 rounded-xl border border-[#24282D] space-y-3 text-xs leading-relaxed">
           <span class="text-[10px] font-mono text-[#D6A84F] uppercase font-bold tracking-wider block">EXECUTIVE INVESTIGATION FINDINGS</span>
           <p class="text-[#E5E7EB]">
-            On ${activeEmail.date}, the <span class="text-[#D6A84F]">Tracex</span> Intelligence Engine ingested email evidence payload <code class="font-mono text-[#D6A84F] break-all">${currentCase.fileName || 'evidence.eml'}</code> subject line <code class="font-mono text-white">"${activeEmail.subject}"</code>.
+            On ${activeEmail.date}, the <span class="text-[#D6A84F]">TraceX</span> Intelligence Engine ingested email evidence payload <code class="font-mono text-[#D6A84F] break-all">${currentCase.fileName || 'evidence.eml'}</code> subject line <code class="font-mono text-white">"${activeEmail.subject}"</code>.
           </p>
           <p class="text-[#9CA3AF]">
             Analysis confirmed ${activeEmail.classification} signals with a threat score of <strong class="text-white font-mono">${activeEmail.riskScore}/100</strong>. Header relay tracking identified origin infrastructure from <strong class="text-white font-mono">${activeEmail.originGeo ? activeEmail.originGeo.probableOrigin : 'Remote Node'}</strong>. Cryptographic integrity has been sealed at Block Height <strong class="text-[#D6A84F] font-mono">#${blockHeight}</strong> with parent hash chaining in browser-native localStorage ledger.
@@ -123,7 +123,7 @@ export function renderForensicReport(currentCase = {}, activeEmail = {}, hasAnal
         <!-- Closing Final Action Strip -->
         <div class="pt-6 border-t border-[#24282D] flex flex-col sm:flex-row items-center justify-between gap-4">
           <div class="text-xs text-[#9CA3AF] font-mono text-center sm:text-left">
-            Generated autonomously by <span class="text-[#D6A84F]">Tracex</span> • Enterprise Forensic Intelligence Solution
+            Generated autonomously by <span class="text-[#D6A84F]">TraceX</span>
           </div>
           <div class="text-xs font-bold text-[#D6A84F] font-mono">
             Trace the threat. Preserve the evidence.
@@ -135,7 +135,7 @@ export function renderForensicReport(currentCase = {}, activeEmail = {}, hasAnal
       <!-- Minimal Footer -->
       <footer class="mt-16 sm:mt-20 pt-8 border-t border-[#24282D]/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#9CA3AF] font-mono">
         <div>
-          © 2026 <span class="text-[#D6A84F]">Tracex</span> Platform Inc. All rights reserved.
+          © 2026 <span class="text-[#D6A84F]">TraceX</span>
         </div>
       </footer>
 

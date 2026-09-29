@@ -81,7 +81,7 @@ export function renderThreatResult({ activeEmail, hasAnalyzedFile = true }) {
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
-          <button id="download-current-case-btn" type="button" class="text-xs font-mono px-3 py-2 rounded-xl border border-[#24282D] hover:border-[#D6A84F] bg-[#15181C] text-[#9CA3AF] hover:text-white flex items-center gap-1.5 transition-all cursor-pointer shadow-sm">
+          <button id="download-current-case-btn" type="button" class="text-xs font-mono px-3 py-2 rounded-xl border border-[#D6A84F]/50 shadow-[0_0_10px_rgba(214,168,79,0.2)] hover:border-[#D6A84F] hover:shadow-[0_0_14px_rgba(214,168,79,0.35)] bg-[#15181C] text-[#9CA3AF] hover:text-white flex items-center gap-1.5 transition-all cursor-pointer">
             <span class="material-symbols-outlined text-sm text-[#D6A84F]">download</span>
             <span>Export Raw .eml</span>
           </button>

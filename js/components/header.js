@@ -11,7 +11,7 @@ export function renderHeader() {
           <span class="material-symbols-outlined text-xl text-[#D6A84F] group-hover:scale-105 transition-transform duration-300 animate-pulse">security</span>
         </div>
         <div class="flex items-center font-mono font-bold text-xl tracking-tight select-none">
-          <span id="brand-decrypt-text" class="text-[#D6A84F]">Tracex</span>
+          <span id="brand-decrypt-text" class="text-[#D6A84F]">TraceX</span>
           <span id="brand-terminal-cursor" class="text-[#D6A84F] font-bold animate-blink">_</span>
         </div>
       </a>
@@ -35,7 +35,7 @@ export function renderHeader() {
       <!-- Right Action Container (SIH Evaluator Sample Files Dropdown) -->
       <div class="hidden md:flex items-center shrink-0">
         <div class="relative inline-block text-left" id="sample-menu-container">
-          <button id="sample-dropdown-btn" type="button" class="border border-[#24282D] hover:border-[#D6A84F]/50 bg-[#15181C] text-xs px-3.5 py-2 rounded-xl text-[#9CA3AF] hover:text-white flex items-center gap-1.5 transition-all cursor-pointer shadow-sm">
+          <button id="sample-dropdown-btn" type="button" class="border border-[#D6A84F]/50 shadow-[0_0_10px_rgba(214,168,79,0.2)] hover:border-[#D6A84F] hover:shadow-[0_0_14px_rgba(214,168,79,0.35)] bg-[#15181C] text-xs px-3.5 py-2 rounded-xl text-[#9CA3AF] hover:text-white flex items-center gap-1.5 transition-all cursor-pointer">
             <span class="material-symbols-outlined text-sm text-[#D6A84F]">folder_open</span>
             <span class="font-bold text-white">Sample Files</span>
             <span class="material-symbols-outlined text-xs">arrow_drop_down</span>
@@ -82,7 +82,7 @@ export function renderHeader() {
 
 // Decryption Scramble Engine for Logo Title
 export function initLogoDecryptAnimation() {
-  const targetText = "Tracex";
+  const targetText = "TraceX";
   const element = document.getElementById("brand-decrypt-text");
   const cursor = document.getElementById("brand-terminal-cursor");
   if (!element) return;
@@ -109,7 +109,7 @@ export function initLogoDecryptAnimation() {
 
     if (iteration >= totalIterations) {
       clearInterval(decryptInterval);
-      element.innerText = targetText; // Ensure pristine final casing "Tracex"
+      element.innerText = targetText; // Ensure pristine final casing "TraceX"
       
       // Start terminal underscore blinking once decrypt finishes
       if (cursor) cursor.classList.add("animate-blink");
