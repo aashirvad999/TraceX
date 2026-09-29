@@ -121,10 +121,7 @@ export function renderForensicReport(currentCase = {}, activeEmail = {}, hasAnal
         </div>
 
         <!-- Closing Final Action Strip -->
-        <div class="pt-6 border-t border-[#24282D] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div class="text-xs text-[#9CA3AF] font-mono text-center sm:text-left">
-            Generated autonomously by <span class="text-[#D6A84F]">TraceX</span>
-          </div>
+        <div class="pt-6 border-t border-[#24282D] flex justify-end">
           <div class="text-xs font-bold text-[#D6A84F] font-mono">
             Trace the threat. Preserve the evidence.
           </div>
